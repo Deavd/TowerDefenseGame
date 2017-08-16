@@ -9,12 +9,12 @@ public class LevelHandler : MonoBehaviour
     public Text gameTimerText;
     //text for money
     public TextMeshProUGUI gameMoneyText;
-    public bool isPaused { get; set; }
+    public TextMeshProUGUI gameLifesText;
+    public bool IsPaused { get; set; }
     //the time the level started
     private float startTime;
 
-    //the players money
-    private double money = 600;
+
 
     //TOWER PANEL
     public List<GameObject> towers;
@@ -22,18 +22,37 @@ public class LevelHandler : MonoBehaviour
     public GameObject towerButtonPanelContainer;
     public int selectedTower = -1;
     // END TOWER PANEL
+        //the players money
+    public static double money = 600;
     public double Money
     {
         get
         {
-            return this.money;
+            return money;
         }
         set
         {
             //MoneyAnimation(value);
-            this.money = value;
+            money = value;
             //Update gui
-            gameMoneyText.text = value.ToString() + "$";
+           gameMoneyText.text = value.ToString() + "$";
+
+        }
+    }
+    //the players lifes
+    private static int lifes = 20;
+    public int Lifes
+    {
+        get
+        {
+            return lifes;
+        }
+        set
+        {
+            //MoneyAnimation(value);
+            lifes = value;
+            //Update gui
+            gameLifesText.text = value.ToString();
 
         }
     }
@@ -48,7 +67,7 @@ public class LevelHandler : MonoBehaviour
     //function to start thge level
     public void StartLevel(int mapSizeX, int mapSizeZ, int levelDifficulty, GameObject mapGroundObject)
     {
-        Money = money;
+        Money = Money;
         //load all aviable towers
         LoadTowers();
         //add them to the bar
@@ -111,7 +130,7 @@ public class LevelHandler : MonoBehaviour
     //display timer
     private void UpdateTimer()
     {
-        if (!isPaused)
+        if (!IsPaused)
         {
             time = Time.time - startTime;
             string min = Mathf.Floor(time / 60).ToString("00");
@@ -170,6 +189,7 @@ public class LevelHandler : MonoBehaviour
             towerInfo.selectButton.GetComponentsInChildren<Text>()[0].text = towerInfo.name;
         }
     }
+    public GameObject missle;
     public void LoadTowers()
     {
         TowerInformation RocketLauncher = new TowerInformation(
@@ -178,11 +198,11 @@ public class LevelHandler : MonoBehaviour
             3,                                          //Max Level
             new float[] { 4, 5, 6 },                    //Range
             new float[] { 100, 200, 300 },              //Damage
-            new float[] { 0.25f, 0.2f, 0.15f },         //Attackspeed
+            new float[] { 12.25f, 0.002f, 0.15f },         //Attackspeed
             new float[] { 0.1f, 2f, 5f },               //Build Time
             new double[] { 150, 100, 200 },             //Buy Price
             new double[] { 1, 2, 3 },                   //Sell Price
-            new MissleTypes[] { MissleTypes.ROCKET },   //Missle Type
+            new GameObject[] { missle},   //Missle Type
             0                                           //Tower ID
         );
         aviableTowers.Add(RocketLauncher);
