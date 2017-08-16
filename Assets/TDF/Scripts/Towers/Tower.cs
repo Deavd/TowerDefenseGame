@@ -52,17 +52,19 @@ public class Tower : MonoBehaviour
 {
     bool active = false;
     public TowerInformation TowerInformation {set; get;}
+    private GameObject target;
     public void LoadInformations(TowerInformation info){
         TowerInformation = info;
     }
 
-    float updateTime = 2.1f; //seconds
+    float updateTime = 0.1f; //seconds
     float lastUpdateTime; 
     void Update(){
         if(!active || Time.time - lastUpdateTime < updateTime){
             return;
         }
         lastUpdateTime = Time.time;
+        TargetEnemy();
         RotateToEnemy();
         AttackEnemy();
     }
@@ -86,9 +88,7 @@ public class Tower : MonoBehaviour
                 closestTarget = enemy;
             }
         }
-        if(closestTarget != null){
-            this.target = closestTarget;
-        }
+        this.target = closestTarget;        
         RotateToEnemy();
     }
     private void RotateToEnemy()
@@ -102,18 +102,8 @@ public class Tower : MonoBehaviour
     public virtual void AttackEnemy()
     {
         if(target == null){return;}
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        foreach (GameObject enemy in enemies){
-            float distance = (this.transform.position - enemy.transform.position).magnitude;
-            if(distance < TowerInformation.range[TowerInformation.level]){
-                GameObject missile = (GameObject) Instantiate(TowerInformation.missile[0], this.transform.position, Quaternion.identity);
-                missile.GetComponent<Missiles>().Shoot(target, TowerInformation.damage[TowerInformation.level]);
-
-             Debug.Log("Shoot dist:"+distance);
-                return;
-            }
-        }
-       
+        GameObject missile = (GameObject) Instantiate(TowerInformation.missile[0], this.transform.position, this.transform.rotation);
+        missile.GetComponent<Missiles>().Shoot(target, TowerInformation.damage[TowerInformation.level]);     
     }
     public void changeTarget(TargetTypes type)
     {
