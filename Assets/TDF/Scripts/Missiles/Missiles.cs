@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Missiles : MonoBehaviour {
 	private GameObject target;
-
 	private float damage;
 	public float accuracy;
 	public float speed;
@@ -34,11 +33,10 @@ public class Missiles : MonoBehaviour {
 			return;
 		}
 		//Bewege das Objekt in Richtung des Ziels
-		this.transform.Translate(Time.deltaTime * speed * (target.transform.position - this.transform.position).normalized);
+		this.transform.Translate(Time.deltaTime * speed * (target.transform.position - this.transform.position).normalized, Space.World);
 	}
 	void  HitEnemy(){
 		Enemy e = target.GetComponent<Enemy>();
-        Debug.Log(e.health);
-        e.Damage(damage);
+        e.ReceiveDamage(damage);
 	}
 }
