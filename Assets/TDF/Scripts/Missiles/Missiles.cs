@@ -4,12 +4,19 @@ using UnityEngine;
 
 public class Missiles : MonoBehaviour {
 	private GameObject target;
+
+	private float damage;
 	public float accuracy;
 	public float speed;
 
 	// Use this for initialization
 	void Start () {
 		
+	}
+	//Wird aufgerufen wenn die Missile erstellt wird
+	public void Shoot(GameObject target, float damage){
+		this.damage = damage;
+		this.target = target;
 	}
 	
 	// Update is called once per frame
@@ -27,6 +34,11 @@ public class Missiles : MonoBehaviour {
 			return;
 		}
 		//Bewege das Objekt in Richtung des Ziels
-		this.transform.Translate(Time.deltaTime * speed * target.transform.position - this.transform.position);
+		this.transform.Translate(Time.deltaTime * speed * (target.transform.position - this.transform.position).normalized);
+	}
+	void  HitEnemy(){
+		Enemy e = target.GetComponent<Enemy>();
+        Debug.Log(e.health);
+        e.Damage(damage);
 	}
 }
