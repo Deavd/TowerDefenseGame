@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-public enum MissleTypes { ROCKET, NORMAL, ELECTRIC };
+
 public enum TargetTypes { LAST, FIRST, CLOSE, FARE, STRONG, WEAK };
 public class TowerInformation
 {
@@ -22,11 +22,11 @@ public class TowerInformation
     public double[] buyPrice;
     public double BuyPrice {get{return buyPrice[level];}}
     public double[] sellPrice;
-    public MissleTypes[] missleType;
+    public GameObject[] missile;
     public TargetTypes targetType = TargetTypes.CLOSE;
     MapObject mapObject;
     public TowerInformation(string name, int level, int maxLevel, float[] range, float[] damage, float[] attackSpeed,
-                            float[] buildTime, double[] buyPrice, double[] sellPrice, MissleTypes[] missleType, int id)
+                            float[] buildTime, double[] buyPrice, double[] sellPrice, GameObject[] missile, int id)
     {
         this.name = name;
         this.level = level;
@@ -37,7 +37,7 @@ public class TowerInformation
         this.buildTime = buildTime;
         this.buyPrice = buyPrice;
         this.sellPrice = sellPrice;
-        this.missleType = missleType;
+        this.missile = missile;
         this.id = id;
     }
     public void Upgrade()
