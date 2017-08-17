@@ -6,39 +6,46 @@ using UnityEngine.UI;
 public enum TargetTypes { LAST, FIRST, CLOSE, FARE, STRONG, WEAK };
 public class TowerInformation
 {
-    public bool canUpgrade()
-    {
-        return level < maxLevel;
-    }
+
+}
+public class Tower : MonoBehaviour
+{
     public Button selectButton;
     public readonly int id;
-    public string name;
-    public int level = 1;
+    public string displayName;
+    public int level = 0;
     public int maxLevel = 3;
     public float[] range;
+    public float Range{
+        get{return range[level];}
+    }
     public float[] damage;
+    public float Damage{
+        get{return damage[level];}
+    }
     public float[] attackSpeed;
+    public float AttackSpeed{
+        get{return attackSpeed[level];}
+    }
     public float[] buildTime;
+    public float BuildTime{
+        get{return buildTime[level];}
+    }
     public double[] buyPrice;
     public double BuyPrice {get{return buyPrice[level];}}
     public double[] sellPrice;
+    public double SellPrice{
+        get{return sellPrice[level];}
+    }
     public GameObject[] missile;
+    public GameObject Missile{
+        get{return missile[level];}
+    }
     public TargetTypes targetType = TargetTypes.CLOSE;
     MapObject mapObject;
-    public TowerInformation(string name, int level, int maxLevel, float[] range, float[] damage, float[] attackSpeed,
-                            float[] buildTime, double[] buyPrice, double[] sellPrice, GameObject[] missile, int id)
+    public bool canUpgrade()
     {
-        this.name = name;
-        this.level = level;
-        this.maxLevel = maxLevel;
-        this.range = range;
-        this.damage = damage;
-        this.attackSpeed = attackSpeed;
-        this.buildTime = buildTime;
-        this.buyPrice = buyPrice;
-        this.sellPrice = sellPrice;
-        this.missile = missile;
-        this.id = id;
+        return level < maxLevel;
     }
     public void Upgrade()
     {
@@ -47,16 +54,8 @@ public class TowerInformation
             level++;
         }
     }
-}
-public class Tower : MonoBehaviour
-{
     bool active = false;
-    public TowerInformation TowerInformation {set; get;}
     private GameObject target;
-    public void LoadInformations(TowerInformation info){
-        TowerInformation = info;
-    }
-
     float updateTime = 0.1f; //seconds
     float lastUpdateTime; 
     void Update(){
@@ -79,7 +78,7 @@ public class Tower : MonoBehaviour
     private void TargetEnemy()
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        float distance = TowerInformation.range[TowerInformation.level];
+        float distance = Range;
         GameObject closestTarget = null;
         foreach (GameObject enemy in enemies){
             float distanceToEnemy = (this.transform.position - enemy.transform.position).magnitude;
@@ -102,11 +101,11 @@ public class Tower : MonoBehaviour
     public virtual void AttackEnemy()
     {
         if(target == null){return;}
-        GameObject missile = (GameObject) Instantiate(TowerInformation.missile[0], this.transform.position, this.transform.rotation);
-        missile.GetComponent<Missiles>().Shoot(target, TowerInformation.damage[TowerInformation.level]);     
+        GameObject missile = (GameObject) Instantiate(Missile, this.transform.position, this.transform.rotation);
+        missile.GetComponent<Missiles>().Shoot(target, Damage);     
     }
     public void changeTarget(TargetTypes type)
     {
-        TowerInformation.targetType = type;
+        targetType = type;
     }
 }
