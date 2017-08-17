@@ -17,12 +17,12 @@ public class LevelHandler : MonoBehaviour
 
 
     //TOWER PANEL
-    public List<GameObject> towers;
+    public List<GameObject> towerObjs;
     public GameObject towerButton;
     public GameObject towerButtonPanelContainer;
     public int selectedTower = -1;
     // END TOWER PANEL
-        //the players money
+    //the players money
     public static double money = 600;
     public double Money
     {
@@ -56,7 +56,6 @@ public class LevelHandler : MonoBehaviour
 
         }
     }
-    public List<TowerInformation> aviableTowers = new List<TowerInformation>();
     public static LevelHandler Instance
     {
         get
@@ -68,14 +67,12 @@ public class LevelHandler : MonoBehaviour
     public void StartLevel(int mapSizeX, int mapSizeZ, int levelDifficulty, GameObject mapGroundObject)
     {
         Money = Money;
-        //load all aviable towers
-        LoadTowers();
         //add them to the bar
         LoadTowerBar();
         //create the map
         MapCreator.Instance.createMap(mapSizeX, mapSizeZ, levelDifficulty, mapGroundObject);
         //start wave
-        WaveHandler.Instance.spawnWave();
+        WaveHandler.Instance.startSpawningWaves();
         //start the timer
         startTime = Time.time;
     }
@@ -111,13 +108,15 @@ public class LevelHandler : MonoBehaviour
                 {
                     towerPreviewLastUpdateTime = Time.time;
                     //change prevTower position
-                    drawingTower.transform.position =  MapCreator.Instance.getPosition(hit.collider.GetComponent<MapObject>().posX,hit.collider.GetComponent<MapObject>().posZ);
+                    Vector3 placePosition = MapCreator.Instance.getPosition(hit.collider.GetComponent<MapObject>().posX,hit.collider.GetComponent<MapObject>().posZ);
+                    placePosition.y = drawingTower.transform.localScale.y/2;
+                    drawingTower.transform.position = placePosition;
                 }
             }
             else
             {
                 //create the prevTower
-                drawingTower = Instantiate(towers[selectedTower], Input.mousePosition, Quaternion.identity);
+                drawingTower = Instantiate(towerObjs[selectedTower], Input.mousePosition, Quaternion.identity);
             }
         }
         else if (drawingTower != null)
@@ -138,23 +137,30 @@ public class LevelHandler : MonoBehaviour
             gameTimerText.text = min + ":" + sec;
         }
     }
+    public Tower loadTower(){
+        return towerObjs[selectedTower].GetComponent<Tower>();
+    }
     public bool PlaceTower(int x, int z)
     {
+        Tower tower = loadTower();
         //check if player has enough money
-        if (Money >= aviableTowers[selectedTower].BuyPrice)
+        double buyPrice = tower.BuyPrice;
+        
+        if (Money >= buyPrice)
         {
             //handle economy
-            Money -= aviableTowers[selectedTower].BuyPrice;
-            //place the tower
-            GameObject towerObj = Instantiate(towers[selectedTower], MapCreator.Instance.getPosition(x, z), Quaternion.identity);
+            Money -= buyPrice;
+            //place the tower$
+            Vector3 placePosition = MapCreator.Instance.getPosition(x, z);
+            placePosition.y = tower.transform.localScale.y/2;
+            GameObject towerObj = Instantiate(towerObjs[selectedTower], placePosition, Quaternion.identity);
             Tower testTower = towerObj.GetComponent<Tower>();
-            testTower.LoadInformations(aviableTowers[selectedTower]);
             testTower.Build();
             return true;
         }
         else
         {
-            Debug.LogError("Not enough money; MONEY:" + Money + " PRICE: " + aviableTowers[selectedTower].BuyPrice);
+            Debug.LogError("Not enough money; MONEY:" + Money + " PRICE: " + buyPrice);
         }
         return false;
     }
@@ -163,48 +169,32 @@ public class LevelHandler : MonoBehaviour
     public void SelectTower(int id)
     {
         //check if player has enough money
-        if (Money >= aviableTowers[id].BuyPrice)
+        if (Money >= towerObjs[id].GetComponent<Tower>().BuyPrice)
         {
             //change selected tower
             selectedTower = id;
         }
         else
         {
-            Debug.LogError("Not enough money; MONEY:" + Money + " PRICE: " + aviableTowers[id].BuyPrice);
+            Debug.LogError("Not enough money; MONEY:" + Money + " PRICE: " + loadTower().BuyPrice);
         }
     }
     //loads the aviable towers into the panelbar
     public void LoadTowerBar()
     {
-        foreach (TowerInformation towerInfo in aviableTowers)
+        foreach (GameObject towerObj in towerObjs)
         {
+            Tower tower = towerObj.GetComponent<Tower>();
             //create button
-            towerInfo.selectButton = Instantiate(towerButton).GetComponent<Button>();
+            tower.selectButton = Instantiate(towerButton).GetComponent<Button>();
             //add a listener
-            int id = towerInfo.id;
-            towerInfo.selectButton.onClick.AddListener(() => SelectTower(id));
+            int id = tower.id;
+            tower.selectButton.onClick.AddListener(() => SelectTower(id));
             //put it into the panel
-            towerInfo.selectButton.transform.SetParent(towerButtonPanelContainer.transform);
+            tower.selectButton.transform.SetParent(towerButtonPanelContainer.transform);
             //change button text
-            towerInfo.selectButton.GetComponentsInChildren<Text>()[0].text = towerInfo.name;
+            tower.selectButton.GetComponentsInChildren<Text>()[0].text = tower.name;
         }
     }
     public GameObject missle;
-    public void LoadTowers()
-    {
-        TowerInformation RocketLauncher = new TowerInformation(
-            "Rocket Launcher",                          //Display Name
-            1,                                          //Level
-            3,                                          //Max Level
-            new float[] { 4, 5, 6 },                    //Range
-            new float[] { 100, 200, 300 },              //Damage
-            new float[] { 12.25f, 0.002f, 0.15f },         //Attackspeed
-            new float[] { 0.1f, 2f, 5f },               //Build Time
-            new double[] { 150, 100, 200 },             //Buy Price
-            new double[] { 1, 2, 3 },                   //Sell Price
-            new GameObject[] { missle},   //Missle Type
-            0                                           //Tower ID
-        );
-        aviableTowers.Add(RocketLauncher);
-    }
 }
