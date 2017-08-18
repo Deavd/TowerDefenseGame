@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.UI;
 using TMPro;
 public class LevelHandler : MonoBehaviour
@@ -109,7 +110,7 @@ public class LevelHandler : MonoBehaviour
                     towerPreviewLastUpdateTime = Time.time;
                     //change prevTower position
                     Vector3 placePosition = MapCreator.Instance.getPosition(hit.collider.GetComponent<MapObject>().posX,hit.collider.GetComponent<MapObject>().posZ);
-                    placePosition.y = drawingTower.transform.localScale.y/2;
+                    //placePosition.y = drawingTower.transform.localScale.y/2;
                     drawingTower.transform.position = placePosition;
                 }
             }
@@ -140,7 +141,7 @@ public class LevelHandler : MonoBehaviour
     public Tower loadTower(){
         return towerObjs[selectedTower].GetComponent<Tower>();
     }
-    public bool PlaceTower(int x, int z)
+    public GameObject PlaceTower(int x, int z)
     {
         Tower tower = loadTower();
         //check if player has enough money
@@ -152,17 +153,21 @@ public class LevelHandler : MonoBehaviour
             Money -= buyPrice;
             //place the tower$
             Vector3 placePosition = MapCreator.Instance.getPosition(x, z);
-            placePosition.y = tower.transform.localScale.y/2;
+            //placePosition.y = tower.transform.localScale.y/2;
             GameObject towerObj = Instantiate(towerObjs[selectedTower], placePosition, Quaternion.identity);
             Tower testTower = towerObj.GetComponent<Tower>();
+            NavMeshObstacle navObstacle = towerObj.GetComponent<NavMeshObstacle>();
+            navObstacle.enabled = true;
             testTower.Build();
-            return true;
+            Destroy(drawingTower);
+            this.selectedTower = -1;
+            return towerObj;
         }
         else
         {
             Debug.LogError("Not enough money; MONEY:" + Money + " PRICE: " + buyPrice);
         }
-        return false;
+        return null;
     }
     
     //triggered from listener;; select a tower with button in panel
