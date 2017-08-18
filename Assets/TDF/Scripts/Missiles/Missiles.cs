@@ -32,6 +32,7 @@ public class Missiles : MonoBehaviour {
 			Destroy(this.gameObject);
 			return;
 		}
+		this.transform.LookAt(target.transform);
 		//Bewege das Objekt in Richtung des Ziels
 		this.transform.Translate(Time.deltaTime * speed * (target.transform.position - this.transform.position).normalized, Space.World);
 	}

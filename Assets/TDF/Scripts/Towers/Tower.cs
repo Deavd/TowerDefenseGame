@@ -52,7 +52,7 @@ public class Tower : MonoBehaviour
         }
     }
     bool active = false;
-    private GameObject target;
+    public GameObject target;
     float updateTime = 0.1f; //seconds
     float lastUpdateTime; 
     float lastShootTime; 
@@ -88,20 +88,20 @@ public class Tower : MonoBehaviour
                 closestTarget = enemy;
             }
         }
-        this.target = closestTarget;        
-        RotateToEnemy();
+        this.target = closestTarget;      
     }
     //has movement -> later for buffs etc...
     private float rotationSpeed = 150f;
     private void RotateToEnemy()
     {
         if(target != null){
+            
             //get the direction
-            Vector3 direction = target.transform.position - transform.position;
+            Vector3 direction = target.transform.position - transform.GetChild(0).position;
             //calc the roation needed to look at the target 
             Quaternion lookRotation = Quaternion.LookRotation(direction);
             Vector3 targetPos = target.transform.position;
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 10.1f /* speed */);
+            transform.GetChild(0).rotation = Quaternion.Slerp(transform.GetChild(0).rotation, lookRotation, Time.deltaTime * 10.1f /* speed */);
            
 
         }
@@ -109,7 +109,8 @@ public class Tower : MonoBehaviour
     public virtual void AttackEnemy()
     {
         if(target == null){return;}
-        GameObject missile = (GameObject) Instantiate(Missile, this.transform.position, this.transform.rotation);
+
+        GameObject missile = (GameObject) Instantiate(Missile, this.transform.GetChild(2).position, this.transform.GetChild(0).rotation);
         missile.GetComponent<Missiles>().Shoot(target, Damage);     
     }
     public void changeTarget(TargetTypes type)
