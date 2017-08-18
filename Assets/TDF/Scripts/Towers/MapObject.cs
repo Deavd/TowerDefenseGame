@@ -15,15 +15,22 @@ public class MapObject : MonoBehaviour
     GameObject tower;
     void OnMouseDown()
     {
-        if (isBuildable)
+        if (LevelHandler.Instance.selectedTower != -1)
         {
-            if (LevelHandler.Instance.selectedTower != -1)
+            if (isBuildable)
             {
-                if (LevelHandler.Instance.PlaceTower(posX, posZ))
+                GameObject TowerObj = LevelHandler.Instance.PlaceTower(posX, posZ);
+                if (TowerObj != null)
                 {
                     this.GetComponent<Renderer>().material.color = new Color(1, 1, 1, 1);
 					isBuildable = false;
+                    this.tower = TowerObj;
                 }
+            }
+        }else{
+            if(tower != null){
+                Tower t = tower.GetComponent<Tower>();
+                UIHandler.Instance.LoadTowerGui(t);
             }
         }
     }
