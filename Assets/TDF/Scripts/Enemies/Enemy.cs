@@ -7,6 +7,9 @@ public class Enemy : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		InitStart();
+	}
+	public void InitStart () {
 		this.GetComponent<NavMeshAgent>().speed = speed;
 	}
 	
