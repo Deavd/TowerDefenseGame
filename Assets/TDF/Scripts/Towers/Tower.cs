@@ -4,10 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public enum TargetTypes { LAST, FIRST, CLOSE, FARE, STRONG, WEAK };
-public class TowerInformation
-{
 
-}
 public class Tower : MonoBehaviour
 {
     public Button selectButton;
@@ -58,14 +55,18 @@ public class Tower : MonoBehaviour
     private GameObject target;
     float updateTime = 0.1f; //seconds
     float lastUpdateTime; 
+    float lastShootTime; 
     void Update(){
+        RotateToEnemy();
+        if(Time.time > lastShootTime + AttackSpeed /* speed */){
+            lastShootTime = Time.time;
+            AttackEnemy();
+        }
         if(!active || Time.time - lastUpdateTime < updateTime){
             return;
         }
         lastUpdateTime = Time.time;
         TargetEnemy();
-        RotateToEnemy();
-        AttackEnemy();
     }
     void OnMouseOver()
     {
@@ -90,12 +91,19 @@ public class Tower : MonoBehaviour
         this.target = closestTarget;        
         RotateToEnemy();
     }
+    //has movement -> later for buffs etc...
+    private float rotationSpeed = 150f;
     private void RotateToEnemy()
     {
         if(target != null){
+            //get the direction
+            Vector3 direction = target.transform.position - transform.position;
+            //calc the roation needed to look at the target 
+            Quaternion lookRotation = Quaternion.LookRotation(direction);
             Vector3 targetPos = target.transform.position;
-            targetPos.y = transform.position.y;
-            transform.LookAt(targetPos);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 10.1f /* speed */);
+           
+
         }
     }
     public virtual void AttackEnemy()
