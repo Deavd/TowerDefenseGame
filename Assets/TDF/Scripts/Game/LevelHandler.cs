@@ -23,6 +23,16 @@ public class LevelHandler : MonoBehaviour
     public GameObject towerButtonPanelContainer;
     public int selectedTower = -1;
     // END TOWER PANEL
+    public static Camera mainCamera;
+
+	public static GameObject healthBar;
+    public static Canvas GameUI;
+    void Awake(){
+        mainCamera =  Camera.main;
+        healthBar =  GameObject.Find("Healthbar");
+        GameUI = GameObject.Find("GameUI").GetComponent<Canvas>();
+        Debug.Log("init health");
+    }
     //the players money
     public static double money = 600;
     public double Money
@@ -139,6 +149,7 @@ public class LevelHandler : MonoBehaviour
         }
     }
     public Tower loadTower(){
+        Debug.Log("SELECTET TOWER: "+selectedTower);
         return towerObjs[selectedTower].GetComponent<Tower>();
     }
     public GameObject PlaceTower(int x, int z)
@@ -160,6 +171,7 @@ public class LevelHandler : MonoBehaviour
             navObstacle.enabled = true;
             testTower.Build();
             Destroy(drawingTower);
+            Debug.Log("REMOVING SELECTED TOWER");
             this.selectedTower = -1;
             return towerObj;
         }
@@ -173,32 +185,37 @@ public class LevelHandler : MonoBehaviour
     //triggered from listener;; select a tower with button in panel
     public void SelectTower(int id)
     {
+        Debug.Log(id);
         //check if player has enough money
         if (Money >= towerObjs[id].GetComponent<Tower>().BuyPrice)
         {
+            Debug.Log("SETTING ID TO "+id);
             //change selected tower
             selectedTower = id;
         }
         else
         {
-            Debug.LogError("Not enough money; MONEY:" + Money + " PRICE: " + loadTower().BuyPrice);
+            Debug.LogError("Not enough money; MONEY:" + Money + " PRICE: " + towerObjs[id].GetComponent<Tower>().BuyPrice);
         }
     }
     //loads the aviable towers into the panelbar
     public void LoadTowerBar()
     {
+        int id = 0;
         foreach (GameObject towerObj in towerObjs)
         {
             Tower tower = towerObj.GetComponent<Tower>();
+            Debug.Log("TOWER INIT: "+tower.displayName+" id: "+id);
             //create button
             tower.selectButton = Instantiate(towerButton).GetComponent<Button>();
             //add a listener
-            int id = tower.id;
-            tower.selectButton.onClick.AddListener(() => SelectTower(id));
+            tower.id = id;
+            tower.selectButton.onClick.AddListener(() => SelectTower(tower.id));
             //put it into the panel
             tower.selectButton.transform.SetParent(towerButtonPanelContainer.transform);
             //change button text
             tower.selectButton.GetComponentsInChildren<Text>()[0].text = tower.name;
+            id++;
         }
     }
     public GameObject missle;
