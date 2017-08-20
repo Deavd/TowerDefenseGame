@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour {
@@ -9,15 +10,24 @@ public class Enemy : MonoBehaviour {
 	void Start () {
 		InitStart();
 	}
+	public GameObject healthBar;
+	public Image healthBarImage;
 	public void InitStart () {
 		this.GetComponent<NavMeshAgent>().speed = speed;
+		healthBar = Instantiate(LevelHandler.healthBar);
+		healthBarImage = healthBar.transform.GetChild(0).GetComponent<Image>();
+
+		healthBar.transform.SetParent(LevelHandler.GameUI.transform, false);
+		healthBar.transform.position = Camera.main.WorldToScreenPoint(this.transform.position);
+		health = maxHealth;
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		
+	public void OnUpdate () {
+		healthBar.transform.position = LevelHandler.mainCamera.WorldToScreenPoint(this.transform.position+Vector3.up);
 	}
-	public float health = 100;
+	public float maxHealth = 100;
+	public float health;
 	public float speed = 10;
 	public float reward = 100;
 
@@ -27,6 +37,7 @@ public class Enemy : MonoBehaviour {
 		if(health <= 0){
 			Die();
 		}
+		healthBarImage.fillAmount = health/maxHealth;
 		//damage animation
 	}
 	public void Heal(float amount){
@@ -34,11 +45,13 @@ public class Enemy : MonoBehaviour {
 	}
 	public void Die(){
 		Destroy(this.gameObject);
+		Destroy(healthBar);
 		LevelHandler.Instance.Money += reward;
 		//die animation
 	}
 	public void Destinated(){
 		Destroy(this.gameObject);
+		Destroy(healthBar);
 		LevelHandler.Instance.Lifes -= damage;
 	}
 }
