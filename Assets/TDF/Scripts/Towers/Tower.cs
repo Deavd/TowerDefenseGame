@@ -8,7 +8,7 @@ public enum TargetTypes { LAST, FIRST, CLOSE, FARE, STRONG, WEAK };
 public class Tower : MonoBehaviour
 {
     public Button selectButton;
-    public readonly int id;
+    public  int id;
     public string displayName;
     public int level = 0;
     public int maxLevel = 3;

@@ -83,7 +83,7 @@ public class LevelHandler : MonoBehaviour
         //create the map
         MapCreator.Instance.createMap(mapSizeX, mapSizeZ, levelDifficulty, mapGroundObject);
         //start wave
-        WaveHandler.Instance.startSpawningWaves();
+        //WaveHandler.Instance.startSpawningWaves();
         //start the timer
         startTime = Time.time;
     }

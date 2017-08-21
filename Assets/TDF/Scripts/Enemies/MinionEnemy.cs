@@ -11,6 +11,6 @@ public class MinionEnemy : Enemy {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		base.OnUpdate();
 	}
 }
