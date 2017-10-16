@@ -94,6 +94,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3afe69a01d4ff77439fcf9147e859bde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healthBar: {fileID: 0}
+  healthBarImage: {fileID: 0}
+  maxHealth: 1000
   health: 388.14
   speed: 5
   reward: 100
@@ -119,8 +122,8 @@ NavMeshAgent:
   m_GameObject: {fileID: 1431084119301898}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 0.12
+  m_Radius: 2
+  m_Speed: 0
   m_Acceleration: 90
   avoidancePriority: 50
   m_AngularSpeed: 500
@@ -129,6 +132,6 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2
-  m_BaseOffset: 0.5
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_BaseOffset: 0.1
+  m_WalkableMask: 1
+  m_ObstacleAvoidanceType: 0
