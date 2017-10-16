@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Enemy">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAIIACgAgACgAAgAAAQAAAAAAQAAAAAAAAEQAAg=</HashCode>
+      <FileName>Assets\TDF\Scripts\Enemies\Enemy.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BaseHandler">
+    <Position X="12.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\TDF\Scripts\Game\BaseHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameHandler">
+    <Position X="14.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAACAAAAAAAAAAAAAAAAIAAACAAIACAAAAAAA=</HashCode>
+      <FileName>Assets\TDF\Scripts\Game\GameHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LevelHandler">
+    <Position X="16.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EIQVAQAIAABAAgAEgABhAAABAAKgEACKRAIgAAIwEEA=</HashCode>
+      <FileName>Assets\TDF\Scripts\Game\LevelHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MapCreator">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AASAIAABACAAAAAAAAAgAEAAEAAABAAAQABAAQQAAAA=</HashCode>
+      <FileName>Assets\TDF\Scripts\Game\MapCreator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WaveHandler">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAQBAQABBCAgIABAAAAAAABAIAQCAAABUBgAAgAAEEA=</HashCode>
+      <FileName>Assets\TDF\Scripts\Game\WaveHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Missiles">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQACAAAACIAhAgAIAAAAAAAAAAAAQAAAEAAAAAAAAA=</HashCode>
+      <FileName>Assets\TDF\Scripts\Missiles\Missiles.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MachineGunTower">
+    <Position X="12.75" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\TDF\Scripts\Towers\MachineGunTower.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tower">
+    <Position X="11" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AASCAACIhJACmIQAJAAgACIAAAECgUIAQABAYgAQigE=</HashCode>
+      <FileName>Assets\TDF\Scripts\Towers\Tower.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MapObject">
+    <Position X="9.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAQAAAAAAAAAAABAABAAAAAEAABAAAAIAAAgAIAAAA=</HashCode>
+      <FileName>Assets\TDF\Scripts\Towers\MapObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UIHandler">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAAAAggAABAAAAFAAAAAAAQAAAAAAAQAA=</HashCode>
+      <FileName>Assets\TDF\Scripts\UI\UIHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RocketlauncherTower">
+    <Position X="12.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\TDF\Scripts\Towers\RocketlauncherTower.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RocketMissile">
+    <Position X="2.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\TDF\Scripts\Missiles\RocketMissile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="TargetTypes">
+    <Position X="18" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QIAAAAAAAAAAAAAAAAAQAAAAAAAAgAAAAAAAAwAAAAA=</HashCode>
+      <FileName>Assets\TDF\Scripts\Towers\Tower.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="MapObjectType">
+    <Position X="18" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAAAAAAEAAAAEAAAAAAQAAAAAAA=</HashCode>
+      <FileName>Assets\TDF\Scripts\Towers\MapObject.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
