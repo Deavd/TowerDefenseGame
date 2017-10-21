@@ -1,0 +1,213 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1302009861751816}
+  m_IsPrefabParent: 1
+--- !u!1 &1109647961453494
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4443201747381828}
+  - component: {fileID: 33724237551930776}
+  - component: {fileID: 23900859026002834}
+  m_Layer: 0
+  m_Name: Base
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1302009861751816
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4371288098890736}
+  - component: {fileID: 208075593578581046}
+  - component: {fileID: 114619982343149936}
+  - component: {fileID: 114750104433860980}
+  m_Layer: 0
+  m_Name: Tower_Wall 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4371288098890736
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1302009861751816}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 8.007462, y: 0.06, z: 5.295515}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4443201747381828}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4443201747381828
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1109647961453494}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4371288098890736}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+--- !u!23 &23900859026002834
+MeshRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1109647961453494}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_Materials:
+  - {fileID: 2100000, guid: 4620413204aaa264f881b17295df5182, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!33 &33724237551930776
+MeshFilter:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1109647961453494}
+  m_Mesh: {fileID: 4300000, guid: 50acce53ca6ef8841ab121c54c92f391, type: 3}
+--- !u!114 &114619982343149936
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1302009861751816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1ff73a69d3d4a7459b01245bf1380ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AttackSpeed:
+    Display: 0
+    Color: {r: 0, g: 0, b: 0, a: 0}
+    Name: 
+    Type: 0
+    Description: 
+    BaseValue: 0
+    Factor: 0
+    BaseFactor: 0
+  Damage:
+    Display: 0
+    Color: {r: 0, g: 0, b: 0, a: 0}
+    Name: 
+    Type: 0
+    Description: 
+    BaseValue: 0
+    Factor: 0
+    BaseFactor: 0
+  Range:
+    Display: 0
+    Color: {r: 0, g: 0, b: 0, a: 0}
+    Name: 
+    Type: 0
+    Description: 
+    BaseValue: 0
+    Factor: 0
+    BaseFactor: 0
+  BuyPrice:
+    Display: 0
+    Color: {r: 0, g: 0, b: 0, a: 0}
+    Name: 
+    Type: 0
+    Description: 
+    BaseValue: 20
+    Factor: 0
+    BaseFactor: 1
+  SellPrice:
+    Display: 0
+    Color: {r: 0, g: 0, b: 0, a: 0}
+    Name: 
+    Type: 0
+    Description: 
+    BaseValue: 8
+    Factor: 0
+    BaseFactor: 1
+  BuildTime:
+    Display: 0
+    Color: {r: 0, g: 0, b: 0, a: 0}
+    Name: Build Time
+    Type: 5
+    Description: 
+    BaseValue: 1
+    Factor: 0
+    BaseFactor: 1
+--- !u!114 &114750104433860980
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1302009861751816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15dd0ed522cee5a42b6fce874ae218a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 2
+  displayName: Wall
+  level: 0
+  maxLevel: 0
+  Stats: {fileID: 114619982343149936}
+  missile: []
+  TargetType: 0
+  Target: {fileID: 0}
+--- !u!208 &208075593578581046
+NavMeshObstacle:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1302009861751816}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 1, z: 0.5}
+  m_MoveThreshold: 0
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0.56, z: 0}
+  m_TimeToStationary: 0.18

@@ -34,9 +34,9 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4662306386296856}
-  - component: {fileID: 95500200383552106}
   - component: {fileID: 114709049967202682}
   - component: {fileID: 208646148038869306}
+  - component: {fileID: 114320032339528314}
   m_Layer: 0
   m_Name: Tower_Rocket
   m_TagString: Untagged
@@ -300,23 +300,71 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1505115516463372}
   m_Mesh: {fileID: 4300000, guid: fb2af031ae2bb724aa41fa73d508df5f, type: 3}
---- !u!95 &95500200383552106
-Animator:
-  serializedVersion: 3
+--- !u!114 &114320032339528314
+MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1496510679974702}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: fb2af031ae2bb724aa41fa73d508df5f, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1ff73a69d3d4a7459b01245bf1380ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AttackSpeed:
+    Display: 1
+    Color: {r: 1, g: 1, b: 1, a: 0}
+    Name: Attack speed
+    Type: 3
+    Description: 
+    BaseValue: 0.39
+    Factor: 0
+    BaseFactor: 1
+  Damage:
+    Display: 1
+    Color: {r: 1, g: 0, b: 0, a: 0}
+    Name: Damage
+    Type: 2
+    Description: 
+    BaseValue: 50
+    Factor: 0
+    BaseFactor: 1
+  Range:
+    Display: 1
+    Color: {r: 1, g: 1, b: 1, a: 0}
+    Name: Range
+    Type: 4
+    Description: 
+    BaseValue: 7
+    Factor: 0
+    BaseFactor: 1
+  BuyPrice:
+    Display: 0
+    Color: {r: 0, g: 0, b: 0, a: 0}
+    Name: buyprice
+    Type: 6
+    Description: 
+    BaseValue: 100
+    Factor: 0
+    BaseFactor: 1
+  SellPrice:
+    Display: 0
+    Color: {r: 0, g: 0, b: 0, a: 0}
+    Name: sellprice
+    Type: 7
+    Description: 
+    BaseValue: 80
+    Factor: 0
+    BaseFactor: 1
+  BuildTime:
+    Display: 1
+    Color: {r: 0.986207, g: 1, b: 0, a: 0}
+    Name: Build Time
+    Type: 5
+    Description: 
+    BaseValue: 1
+    Factor: 0
+    BaseFactor: 1
 --- !u!114 &114709049967202682
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -328,41 +376,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0afa50f3be4960c4da7bb41bf5ac9aa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectButton: {fileID: 0}
   id: 1
   displayName: Rocket Launcher
   level: 0
   maxLevel: 2
-  range:
-  - 10
-  - 20
-  - 25
-  damage:
-  - 33.49
-  - 120
-  - 150
-  attackSpeed:
-  - 0.5
-  - 0.4
-  - 0.35
-  buildTime:
-  - 1
-  - 2
-  - 3
-  buyPrice:
-  - 500
-  - 800
-  - 1000
-  sellPrice:
-  - 250
-  - 525
-  - 700
+  Stats: {fileID: 114320032339528314}
   missile:
   - {fileID: 1432614511051400, guid: c349208ffa162bf47bb1dd225cc43ecd, type: 2}
   - {fileID: 1432614511051400, guid: c349208ffa162bf47bb1dd225cc43ecd, type: 2}
   - {fileID: 1432614511051400, guid: c349208ffa162bf47bb1dd225cc43ecd, type: 2}
-  targetType: 2
-  target: {fileID: 0}
+  TargetType: 2
+  Target: {fileID: 0}
 --- !u!208 &208646148038869306
 NavMeshObstacle:
   m_ObjectHideFlags: 1

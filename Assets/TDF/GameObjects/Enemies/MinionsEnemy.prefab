@@ -23,8 +23,9 @@ GameObject:
   - component: {fileID: 65473974705880826}
   - component: {fileID: 23360083442530382}
   - component: {fileID: 195697679557090218}
-  - component: {fileID: 114641911168374554}
-  m_Layer: 0
+  - component: {fileID: 114845767504059588}
+  - component: {fileID: 114197222220476356}
+  m_Layer: 9
   m_Name: MinionsEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -38,7 +39,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1814761308385682}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.283299, y: 0.45999998, z: 2.8620596}
+  m_LocalPosition: {x: 0.7831049, y: 0.47, z: 4.8694935}
   m_LocalScale: {x: 0.36861444, y: 0.3686146, z: 0.3686146}
   m_Children: []
   m_Father: {fileID: 0}
@@ -95,7 +96,63 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114641911168374554
+--- !u!114 &114197222220476356
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1814761308385682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be2a5820b8462ae4fa31b3410c3ae6e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Speed:
+    Display: 1
+    Color: {r: 0.8088235, g: 0.08326123, b: 0.08326123, a: 0}
+    Name: Speed
+    Type: 8
+    Description: Speed
+    BaseValue: 3.07
+    Factor: 1
+    BaseFactor: 1
+  Damage:
+    Display: 1
+    Color: {r: 0.5955882, g: 0.15765573, b: 0.15765573, a: 0}
+    Name: Damage
+    Type: 2
+    Description: Damage
+    BaseValue: 1
+    Factor: 1
+    BaseFactor: 1
+  Health:
+    Display: 1
+    Color: {r: 0.77205884, g: 0.16463022, b: 0.16463022, a: 0}
+    Name: Health
+    Type: 0
+    Description: Health
+    BaseValue: 200
+    Factor: 0
+    BaseFactor: 2
+  MaxHealth:
+    Display: 0
+    Color: {r: 0, g: 0, b: 0, a: 0}
+    Name: max health
+    Type: 9
+    Description: maximal health
+    BaseValue: 7596
+    Factor: 1
+    BaseFactor: 7.6
+  Reward:
+    Display: 1
+    Color: {r: 0, g: 0, b: 0, a: 0}
+    Name: Drop value
+    Type: 10
+    Description: gold drop on die
+    BaseValue: 20
+    Factor: 1
+    BaseFactor: 1
+--- !u!114 &114845767504059588
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -106,13 +163,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da0d1fb6486581144bd858ce5618d387, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthBar: {fileID: 0}
-  healthBarImage: {fileID: 0}
-  maxHealth: 300
-  health: 300
-  speed: 4
-  reward: 100
-  damage: 1
+  Stats: {fileID: 0}
+  healthBar: {fileID: 1368099700725890, guid: b136af00a92a01e44977a51b05825df8, type: 2}
 --- !u!195 &195697679557090218
 NavMeshAgent:
   m_ObjectHideFlags: 1
@@ -131,6 +183,6 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2
-  m_BaseOffset: 0
+  m_BaseOffset: 0.5
   m_WalkableMask: 1
   m_ObstacleAvoidanceType: 1

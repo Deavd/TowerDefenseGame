@@ -115,6 +115,7 @@ GameObject:
   - component: {fileID: 4515001770041870}
   - component: {fileID: 114685819973612392}
   - component: {fileID: 208816116303749986}
+  - component: {fileID: 114556901819003258}
   m_Layer: 0
   m_Name: Tower_Machinegun
   m_TagString: Untagged
@@ -253,7 +254,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1250414318726814}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.058, y: -0.15000004, z: 0.208}
+  m_LocalPosition: {x: 0.21, y: -0.02, z: 0.208}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4538317828254068}
@@ -306,7 +307,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1572972766822282}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.137, y: 0.04399997, z: 0.208}
+  m_LocalPosition: {x: -0.12, y: 0.04399997, z: 0.208}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4538317828254068}
@@ -319,7 +320,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1536047500669454}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.271, y: -0.035000026, z: 0.208}
+  m_LocalPosition: {x: 0.14, y: -0.15, z: 0.208}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4538317828254068}
@@ -347,7 +348,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1471888887076484}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.525361, y: 0.019062757, z: 10.212533}
+  m_LocalPosition: {x: 516.20746, y: 212.72354, z: -860.4957}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4428905080316330}
@@ -382,7 +383,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1230537944674590}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.12900001, y: -0.11900002, z: 0.208}
+  m_LocalPosition: {x: 0.15, y: 0.04, z: 0.208}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4538317828254068}
@@ -395,7 +396,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1911798467811758}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.256, y: 0.061999977, z: 0.208}
+  m_LocalPosition: {x: -0.11, y: -0.14, z: 0.208}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4538317828254068}
@@ -421,7 +422,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1618171756456810}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.111999996, y: 0.04399997, z: 0.208}
+  m_LocalPosition: {x: 0.03, y: 0.12, z: 0.208}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4538317828254068}
@@ -611,6 +612,71 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1506929306262966}
   m_Mesh: {fileID: 4300002, guid: b0860746df2333a4c94e78f5f8c7cabf, type: 3}
+--- !u!114 &114556901819003258
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1471888887076484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1ff73a69d3d4a7459b01245bf1380ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AttackSpeed:
+    Display: 1
+    Color: {r: 0, g: 1, b: 0.37931013, a: 0}
+    Name: 
+    Type: 3
+    Description: 
+    BaseValue: 0.14
+    Factor: 0
+    BaseFactor: 1
+  Damage:
+    Display: 1
+    Color: {r: 0, g: 1, b: 0.3803922, a: 0}
+    Name: 
+    Type: 2
+    Description: 
+    BaseValue: 5.75
+    Factor: 0
+    BaseFactor: 1
+  Range:
+    Display: 1
+    Color: {r: 0, g: 1, b: 0.3803922, a: 0}
+    Name: 
+    Type: 4
+    Description: 
+    BaseValue: 7
+    Factor: 0
+    BaseFactor: 1
+  BuyPrice:
+    Display: 0
+    Color: {r: 0, g: 1, b: 0.3803922, a: 0}
+    Name: 
+    Type: 6
+    Description: 
+    BaseValue: 100
+    Factor: 0
+    BaseFactor: 1
+  SellPrice:
+    Display: 0
+    Color: {r: 0, g: 1, b: 0.3803922, a: 0}
+    Name: 
+    Type: 7
+    Description: 
+    BaseValue: 80
+    Factor: 0
+    BaseFactor: 1
+  BuildTime:
+    Display: 1
+    Color: {r: 0, g: 1, b: 0.3803922, a: 0}
+    Name: Build Time
+    Type: 5
+    Description: 
+    BaseValue: 1
+    Factor: 0
+    BaseFactor: 1
 --- !u!114 &114685819973612392
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -622,41 +688,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a176f8ec6f0be524cab7f08e2f5547dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectButton: {fileID: 0}
   id: 0
   displayName: Machine Gun
   level: 0
   maxLevel: 2
-  range:
-  - 5
-  - 6
-  - 7
-  damage:
-  - 20
-  - 30
-  - 40
-  attackSpeed:
-  - 0.11
-  - 0.07
-  - 0.05
-  buildTime:
-  - 3
-  - 5
-  - 5
-  buyPrice:
-  - 150
-  - 100
-  - 200
-  sellPrice:
-  - 100
-  - 150
-  - 200
+  Stats: {fileID: 114556901819003258}
   missile:
   - {fileID: 1564913951418768, guid: 957c4c05c275244438785d8c911f325b, type: 2}
   - {fileID: 1564913951418768, guid: 957c4c05c275244438785d8c911f325b, type: 2}
   - {fileID: 1564913951418768, guid: 957c4c05c275244438785d8c911f325b, type: 2}
-  targetType: 2
-  target: {fileID: 0}
+  TargetType: 2
+  Target: {fileID: 0}
 --- !u!208 &208816116303749986
 NavMeshObstacle:
   m_ObjectHideFlags: 1
