@@ -79,28 +79,65 @@ public class Tower : MonoBehaviour
     private void TargetEnemy()
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        float distance = Range;
-        GameObject closestTarget = null;
+
+        GameObject target = null;
+        //var closestDistance = Range;
+        var closestDistance = Stats.Range.Value;
+        var farthestDistance = 0f;
+        var minHealth = float.MaxValue;
+        var maxHealth = 0f;
         foreach (GameObject enemy in enemies){
             float distanceToEnemy = (this.transform.position - enemy.transform.position).magnitude;
+            //if(distanceToEnemy < Range){
+            if(distanceToEnemy <= Stats.Range.Value){
+                Enemy enemyComp = enemy.GetComponent<Enemy>();
+                float health = enemyComp.Stats.Health.Value;
+                switch(TargetType){
+                    case TargetTypes.CLOSE:                        
+                        if(distanceToEnemy <= closestDistance){
+                            closestDistance = distanceToEnemy;
+                            target = enemy;                        
+                        }
+                        break;
+                    case TargetTypes.FAR:
+                        if(distanceToEnemy >= farthestDistance){
+                            farthestDistance = distanceToEnemy;
+                            target = enemy;                        
+                        }
+                        break;
+                    case TargetTypes.WEAK:
+                        if(health <= minHealth){
+                            minHealth = health;
+                            target = enemy;  
+                        }
+                        break;
+                    case TargetTypes.STRONG:
+                        if(health >= maxHealth){
+                            maxHealth = health;
+                            target = enemy;  
+                        }
+                        break;
+                }
+            }
+            /*float distanceToEnemy = (this.transform.position - enemy.transform.position).magnitude;
             if(distanceToEnemy < distance){
                 distance=distanceToEnemy;
                 closestTarget = enemy;
-            }
+            }*/
         }
-        this.target = closestTarget;      
+        this.Target = target;      
     }
     //has movement -> later for buffs etc...
     private float rotationSpeed = 150f;
     private void RotateToEnemy()
     {
-        if(target != null){
+        if(Target != null){
             
             //get the direction
-            Vector3 direction = target.transform.position - transform.GetChild(0).position;
+            Vector3 direction = Target.transform.position - transform.GetChild(0).position;
             //calc the roation needed to look at the target 
             Quaternion lookRotation = Quaternion.LookRotation(direction);
-            Vector3 targetPos = target.transform.position;
+            Vector3 targetPos = Target.transform.position;
             transform.GetChild(0).rotation = Quaternion.Slerp(transform.GetChild(0).rotation, lookRotation, Time.deltaTime * 10.1f /* speed */);
            
 
