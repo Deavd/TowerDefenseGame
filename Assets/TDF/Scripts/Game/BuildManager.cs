@@ -5,22 +5,33 @@ using UnityEngine.AI;
 using UnityEngine.UI;
 public class BuildManager : MonoBehaviour {
 	//TOWER PANEL
-    public List<GameObject> towerObjs;
-    public GameObject towerButton;
-    public GameObject towerButtonPanelContainer;
-    public int selectedTower = -1;
+    public List<GameObject> towerObjs; //prefab
+    public GameObject towerButton;  //prefab
+    public GameObject towerButtonPanelContainer;  //prefab on scene
+    public static int selectedTower = -1;
     // END TOWER PANEL
-    GameObject drawingTower;
+    static GameObject drawingTower;
     Ray ray;
     RaycastHit hit;
     float towerPreviewUpdateTime = 0.1f;
     float towerPreviewLastUpdateTime;
 
-	LevelHandler Level;
-	public BuildManager(LevelHandler level){
-		Level = level;
+	private static BuildManager _instance;
+    public static BuildManager Instance
+    {
+        get
+        {
+            return (_instance == null ? _instance = FindObjectOfType<BuildManager>() : _instance) == null ? new GameObject().AddComponent<BuildManager>(): _instance;
+        }
+    }
+	public void initGUI (){
         LoadTowerBar();
+        enabled = true;
 	}
+    void Start()
+    {
+        enabled = false;
+    }
     void Update()
     {
         TowerPreview();
@@ -33,6 +44,7 @@ public class BuildManager : MonoBehaviour {
         Debug.Log("SELECTET TOWER: "+selectedTower);
         return towerObjs[selectedTower].GetComponent<Tower>();
     }
+
 	private void TowerPreview()
     {
         if(Time.time - towerPreviewLastUpdateTime < towerPreviewUpdateTime){
@@ -49,9 +61,10 @@ public class BuildManager : MonoBehaviour {
                 {
                     towerPreviewLastUpdateTime = Time.time;
                     //change prevTower position
-                    Vector3 placePosition = MapCreator.Instance.getPosition(hit.collider.GetComponent<MapObject>().posX,hit.collider.GetComponent<MapObject>().posZ);
+                    Vector3 placePosition = MapManager.Instance.getPosition(hit.collider.GetComponent<MapObject>().posX,hit.collider.GetComponent<MapObject>().posZ);
                     //placePosition.y = drawingTower.transform.localScale.y/2;
                     drawingTower.transform.position = placePosition;
+                    TowerMenuUI.Instance.ShowRangePreview(loadTower().Stats.Range.Value, placePosition); 
                 }
             }
             else
@@ -66,18 +79,19 @@ public class BuildManager : MonoBehaviour {
             Destroy(drawingTower);
         }
     }
-    public GameObject PlaceTower(int x, int z)
+    public Tower PlaceTower(int x, int z)
     {
         Tower tower = loadTower();
         //check if player has enough money
-        double buyPrice = tower.BuyPrice;
+        //double buyPrice = tower.BuyPrice;
+        double buyPrice = tower.Stats.BuyPrice.Value;
         
-        if (Level.Money >= buyPrice)
+        if (LevelManager.Instance.Money >= buyPrice)
         {
             //handle economy
-            Level.Money -= buyPrice;
+            LevelManager.Instance.Money -= buyPrice;
             //place the tower$
-            Vector3 placePosition = MapCreator.Instance.getPosition(x, z);
+            Vector3 placePosition = MapManager.Instance.getPosition(x, z);
             //placePosition.y = tower.transform.localScale.y/2;
             GameObject towerObj = Instantiate(towerObjs[selectedTower], placePosition, Quaternion.identity);
             Tower testTower = towerObj.GetComponent<Tower>();
@@ -87,12 +101,12 @@ public class BuildManager : MonoBehaviour {
             testTower.Build();
             Destroy(drawingTower);
             Debug.Log("REMOVING SELECTED TOWER");
-            this.selectedTower = -1;
-            return towerObj;
+            selectedTower = -1;
+            return testTower;
         }
         else
         {
-            Debug.LogError("Not enough money; MONEY:" + Level.Money + " PRICE: " + buyPrice);
+            Debug.LogError("Not enough money; MONEY:" + LevelManager.Instance.Money + " PRICE: " + buyPrice);
         }
         return null;
     }
@@ -100,9 +114,12 @@ public class BuildManager : MonoBehaviour {
     //triggered from listener;; select a tower with button in panel
     public void SelectTower(int id)
     {
-        Debug.Log(id);
+        Debug.Log( LevelManager.Instance.Money);
+        Debug.Log( id);
+        Debug.Log( towerObjs[id]);
         //check if player has enough money
-        if (Level.Money >= towerObjs[id].GetComponent<Tower>().BuyPrice)
+        //if (LevelManager.Instance.Money >= towerObjs[id].GetComponent<Tower>().BuyPrice)
+        if (LevelManager.Instance.Money >= towerObjs[id].GetComponent<Tower>().Stats.BuyPrice.Value)
         {
             Debug.Log("SETTING ID TO "+id);
             //change selected tower
@@ -110,7 +127,7 @@ public class BuildManager : MonoBehaviour {
         }
         else
         {
-            Debug.LogError("Not enough money; MONEY:" + Level.Money + " PRICE: " + towerObjs[id].GetComponent<Tower>().BuyPrice);
+            Debug.LogError("Not enough money; MONEY:" + LevelManager.Instance.Money + " PRICE: " + towerObjs[id].GetComponent<Tower>().Stats.BuyPrice.Value);
         }
     }
     //loads the aviable towers into the panelbar
@@ -122,14 +139,14 @@ public class BuildManager : MonoBehaviour {
             Tower tower = towerObj.GetComponent<Tower>();
             Debug.Log("TOWER INIT: "+tower.displayName+" id: "+id);
             //create button
-            tower.selectButton = Instantiate(towerButton).GetComponent<Button>();
+            Button button = Instantiate(towerButton).GetComponent<Button>();
             //add a listener
             tower.id = id;
-            tower.selectButton.onClick.AddListener(() => SelectTower(tower.id));
+            button.onClick.AddListener(() => SelectTower(tower.id));
             //put it into the panel
-            tower.selectButton.transform.SetParent(towerButtonPanelContainer.transform);
+            button.transform.SetParent(towerButtonPanelContainer.transform);
             //change button text
-            tower.selectButton.GetComponentsInChildren<Text>()[0].text = tower.name;
+            button.GetComponentsInChildren<Text>()[0].text = tower.name;
             id++;
         }
     }
