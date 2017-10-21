@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum TargetTypes { LAST, FIRST, CLOSE, FARE, STRONG, WEAK };
+public enum TargetTypes { CLOSE = 0, FAR, STRONG, WEAK };
 
+[RequireComponent(typeof(TowerStat)), RequireComponent(typeof(UnityEngine.AI.NavMeshObstacle))]
 public class Tower : MonoBehaviour
 {
-    public Button selectButton;
+
     public  int id;
     public string displayName;
     public int level = 0;
     public int maxLevel = 3;
-    public float[] range;
+    public TowerStat Stats;
+/*    public float[] range;
     public float Range{
         get{return range[level];}
     }
@@ -34,31 +36,40 @@ public class Tower : MonoBehaviour
     public double SellPrice{
         get{return sellPrice[level];}
     }
+*/
     public GameObject[] missile;
     public GameObject Missile{
         get{return missile[level];}
     }
-    public TargetTypes targetType = TargetTypes.CLOSE;
+
+    public TargetTypes TargetType = TargetTypes.CLOSE;
     MapObject mapObject;
+    protected virtual void Awake(){
+        Stats = GetComponent<TowerStat>();
+        GetComponent<UnityEngine.AI.NavMeshObstacle>().enabled = false;
+    }
     public bool canUpgrade()
     {
         return level < maxLevel;
     }
-    public void Upgrade()
+    public bool Upgrade()
     {
         if (canUpgrade())
         {
             level++;
+            return true;
         }
+        return false;
     }
     bool active = false;
-    public GameObject target;
+    public GameObject Target;
     float updateTime = 0.1f; //seconds
     float lastUpdateTime; 
     float lastShootTime; 
-    void Update(){
+    protected virtual void Update(){
         RotateToEnemy();
-        if(Time.time > lastShootTime + AttackSpeed /* speed */){
+        //if(Time.time > lastShootTime + AttackSpeed /* speed */){
+        if(Time.time > lastShootTime + Stats.AttackSpeed.Value /* speed */){
             lastShootTime = Time.time;
             AttackEnemy();
         }
@@ -145,13 +156,14 @@ public class Tower : MonoBehaviour
     }
     public virtual void AttackEnemy()
     {
-        if(target == null){return;}
+        if(Target == null){return;}
 
         GameObject missile = (GameObject) Instantiate(Missile, this.transform.GetChild(2).position, this.transform.GetChild(0).rotation);
-        missile.GetComponent<Missiles>().Shoot(target, Damage);     
+        //missile.GetComponent<Missiles>().Shoot(Target, Damage);     
+        missile.GetComponent<Missiles>().Shoot(Target, Stats.Damage.Value);     
     }
     public void changeTarget(TargetTypes type)
     {
-        targetType = type;
+        TargetType = type;
     }
 }
