@@ -58,18 +58,33 @@ public class TowerMenuUI : MonoBehaviour {
 					break;
 				case "UPGRADE_txt":
 					text.text = t.Stats.BuyPrice.Value + "$ Upgrade";
+					text.GetComponentInParent<Button>().interactable = t.Stats.CanLevelUp();
 					break;
 				case "INFO_txt":
-					text.text = ColorString(t.displayName,"#00ff00ff")+ System.Environment.NewLine
-					/*foreach(Stat stat in  t.Stats.StatDict.Values){
+					
+					text.text = ColorString(t.displayName,"#00ff00ff")+ System.Environment.NewLine;
+					foreach(Stat stat in  t.Stats.StatDict.Values){
 						if(stat.Display){
-							text.text += ColorString(stat.Name+": ", stat.Color)+ColorString(stat.Value.ToString(), "#ff0000ff") + System.Environment.NewLine;
+							float scaleValue = stat.GetLevelScaleAddValue();
+							text.text += ColorString(stat.Name+": ", "#66ff00ff")
+								+ColorString(stat.Value.ToString(), "#ff0000ff") 
+								+ (scaleValue != 0f ? ColorString(" (" +scaleValue+")", "#ff5500ff") : "NOPE")
+								+ System.Environment.NewLine;
 						}
-					}*/
-					+ColorString("DPS: ","#66ff00ff")+ColorString((t.Stats.Damage.Value/t.Stats.AttackSpeed.Value).ToString(), "#ff0000ff") + System.Environment.NewLine
-					+ColorString("Range: ","#66ff00ff")+ColorString(t.Stats.Range.Value.ToString()+"m", "#ff0000ff") + System.Environment.NewLine
-					+ColorString("Level: ","#66ff00ff")+ColorString((t.level+1).ToString(), "#ff0000ff") + System.Environment.NewLine
-					+ColorString("Build Time: ","#66ff00ff")+ColorString(t.Stats.BuildTime.Value.ToString()+"s", "#ff0000ff") + System.Environment.NewLine;
+					}
+					/*+ColorString("DPS: ","#66ff00ff")
+						+ColorString((t.Stats.Damage.Value/t.Stats.AttackSpeed.Value).ToString(), "#ff0000ff") 
+						+ System.Environment.NewLine
+					+ColorString("Range: ","#66ff00ff")
+						+ColorString(t.Stats.Range.Value.ToString()+"m", "#ff0000ff")
+						+ColorString((ScaleValue = t.Stats.Range.GetLevelScaleValue()) == 0f ? "" : " ("+ScaleValue+")", "#ff5500ff")
+						+ System.Environment.NewLine
+					+ColorString("Level: ","#66ff00ff")
+						+ColorString((t.level+1).ToString(), "#ff0000ff") 
+						+ System.Environment.NewLine
+					+ColorString("Build Time: ","#66ff00ff")
+						+ColorString(t.Stats.BuildTime.Value.ToString()+"s", "#ff0000ff") 
+						+ System.Environment.NewLine;*/
 					
 					break;
 				case "TARGETTYPE_txt":
