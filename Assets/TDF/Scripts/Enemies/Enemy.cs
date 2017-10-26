@@ -4,20 +4,19 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(EnemyStat))]
+[RequireComponent(typeof(EnemyStat)), RequireComponent(typeof(NavMeshAgent))]
 public class Enemy : MonoBehaviour{
 
 	// Use this for initialization
 	public EnemyStat Stats;
 	protected virtual void Awake () {
 		Stats = GetComponent<EnemyStat>();
+		this.tag = "Enemy";
 	}
-	protected virtual void Start () {
-		InitStart();
-	}
+	
 	public GameObject healthBar;
 	private Image healthBarImage;
-	public void InitStart () {
+	protected virtual void Start () {
 		this.GetComponent<NavMeshAgent>().speed = Stats.Speed.Value;
 		healthBar = Instantiate(LevelManager.Instance.healthBar);
 		healthBarImage = healthBar.transform.GetChild(0).GetComponent<Image>();
@@ -28,7 +27,7 @@ public class Enemy : MonoBehaviour{
 	}
 	
 	// Update is called once per frame
-	public void OnUpdate () {
+	protected virtual void Update () {
 		healthBar.transform.position = LevelManager.mainCamera.WorldToScreenPoint(this.transform.position+Vector3.up);
 	}
 	public void ReceiveDamage(float dmg){
