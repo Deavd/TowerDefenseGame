@@ -380,7 +380,6 @@ MonoBehaviour:
   displayName: Rocket Launcher
   level: 0
   maxLevel: 2
-  Stats: {fileID: 114320032339528314}
   missile:
   - {fileID: 1432614511051400, guid: c349208ffa162bf47bb1dd225cc43ecd, type: 2}
   - {fileID: 1432614511051400, guid: c349208ffa162bf47bb1dd225cc43ecd, type: 2}

@@ -116,6 +116,7 @@ GameObject:
   - component: {fileID: 114685819973612392}
   - component: {fileID: 208816116303749986}
   - component: {fileID: 114556901819003258}
+  - component: {fileID: 108983489662373118}
   m_Layer: 0
   m_Name: Tower_Machinegun
   m_TagString: Untagged
@@ -612,6 +613,42 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1506929306262966}
   m_Mesh: {fileID: 4300002, guid: b0860746df2333a4c94e78f5f8c7cabf, type: 3}
+--- !u!108 &108983489662373118
+Light:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1471888887076484}
+  m_Enabled: 1
+  serializedVersion: 8
+  m_Type: 2
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 1
+  m_Range: 6.32
+  m_SpotAngle: 30
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_Lightmapping: 4
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
 --- !u!114 &114556901819003258
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -625,58 +662,73 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AttackSpeed:
     Display: 1
-    Color: {r: 0, g: 1, b: 0.37931013, a: 0}
-    Name: 
+    Name: Attack Speed
     Type: 3
     Description: 
     BaseValue: 0.14
     Factor: 0
     BaseFactor: 1
+    LevelScale: 2
+    LevelScaleLevel: 0
+    LevelScaleValues:
+    - 0.9
+    - 0.8
+    - 0.8
   Damage:
     Display: 1
-    Color: {r: 0, g: 1, b: 0.3803922, a: 0}
-    Name: 
+    Name: Damage
     Type: 2
     Description: 
     BaseValue: 5.75
     Factor: 0
     BaseFactor: 1
+    LevelScale: 0
+    LevelScaleLevel: 0
+    LevelScaleValues: []
   Range:
     Display: 1
-    Color: {r: 0, g: 1, b: 0.3803922, a: 0}
     Name: 
     Type: 4
     Description: 
     BaseValue: 7
     Factor: 0
     BaseFactor: 1
+    LevelScale: 0
+    LevelScaleLevel: 0
+    LevelScaleValues: []
   BuyPrice:
     Display: 0
-    Color: {r: 0, g: 1, b: 0.3803922, a: 0}
     Name: 
     Type: 6
     Description: 
     BaseValue: 100
     Factor: 0
     BaseFactor: 1
+    LevelScale: 0
+    LevelScaleLevel: 0
+    LevelScaleValues: []
   SellPrice:
     Display: 0
-    Color: {r: 0, g: 1, b: 0.3803922, a: 0}
     Name: 
     Type: 7
     Description: 
     BaseValue: 80
     Factor: 0
     BaseFactor: 1
+    LevelScale: 0
+    LevelScaleLevel: 0
+    LevelScaleValues: []
   BuildTime:
     Display: 1
-    Color: {r: 0, g: 1, b: 0.3803922, a: 0}
     Name: Build Time
     Type: 5
     Description: 
     BaseValue: 1
     Factor: 0
     BaseFactor: 1
+    LevelScale: 0
+    LevelScaleLevel: 0
+    LevelScaleValues: []
 --- !u!114 &114685819973612392
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -692,7 +744,6 @@ MonoBehaviour:
   displayName: Machine Gun
   level: 0
   maxLevel: 2
-  Stats: {fileID: 114556901819003258}
   missile:
   - {fileID: 1564913951418768, guid: 957c4c05c275244438785d8c911f325b, type: 2}
   - {fileID: 1564913951418768, guid: 957c4c05c275244438785d8c911f325b, type: 2}
