@@ -13,7 +13,15 @@ public class Tower : MonoBehaviour
     public string displayName;
     public int level = 0;
     public int maxLevel = 3;
-    public TowerStat Stats;
+    private TowerStat _towerStat;
+    public TowerStat Stats {
+        set{
+            _towerStat = value;
+        }
+        get{
+            return _towerStat == null ? _towerStat = GetComponent<TowerStat>() : _towerStat;
+        }
+    }
 /*    public float[] range;
     public float Range{
         get{return range[level];}
@@ -48,18 +56,10 @@ public class Tower : MonoBehaviour
         Stats = GetComponent<TowerStat>();
         GetComponent<UnityEngine.AI.NavMeshObstacle>().enabled = false;
     }
-    public bool canUpgrade()
-    {
-        return level < maxLevel;
-    }
+
     public bool Upgrade()
     {
-        if (canUpgrade())
-        {
-            level++;
-            return true;
-        }
-        return false;
+        return Stats.LevelUpAll();
     }
     bool active = false;
     public GameObject Target;
