@@ -5,7 +5,6 @@ using UnityEngine;
 [System.Serializable]
 public class Stat{
 	public bool Display = true;
-	public Color Color;
 	public string Name;
 	public StatType Type;
 	public string Description;
@@ -21,7 +20,9 @@ public class Stat{
 	}
 	public float Factor = 0f;
 	public float BaseFactor = 1f;
-
+	public LevelScale LevelScale;
+	public int LevelScaleLevel = 0;
+	public float[] LevelScaleValues;
 	public List<StatModifier> Modifiers = new List<StatModifier>();
 	[SerializeField]
 	public List<StatModifier> ModifiersWithExpiryTime = new List<StatModifier>();
@@ -33,10 +34,6 @@ public class Stat{
 		this.Type = type;
 		this.BaseValue = this._value = 0f;
 	}
-	public Stat WithColor(Color c) {
-		this.Color = c;
-		return this;
-	}
 	public Stat WithDescription(string desc)
 	{
 		this.Description = desc;
@@ -47,7 +44,45 @@ public class Stat{
 		this.BaseValue = value;
 		return this;
 	}
-
+	public bool CanLevelUP(){
+		return LevelScaleValues.Length > LevelScaleLevel;
+	}
+	public bool LevelUP(){
+		if(CanLevelUP()){
+			this.LevelScaleLevel++;
+			UpdateLevelScaling();
+			return true;
+		}
+		return false;
+	}
+	public float GetLevelScaleAddValue(){
+		if(!CanLevelUP()){
+			return 0f;
+		}
+		switch(LevelScale){
+			case LevelScale.ADD:
+				return this.BaseValue + LevelScaleValues[LevelScaleLevel];
+			case LevelScale.MULTIPLY:
+				return this.BaseValue * LevelScaleValues[LevelScaleLevel];
+			case LevelScale.SUBTRACT:
+				return this.BaseValue - LevelScaleValues[LevelScaleLevel];
+			default:
+				return 0f;
+		}
+	}
+	public void UpdateLevelScaling(){
+		switch(LevelScale){
+			case LevelScale.ADD:
+				this.BaseValue += LevelScaleValues[LevelScaleLevel-1];
+				break;
+			case LevelScale.MULTIPLY:
+				this.BaseValue *= LevelScaleValues[LevelScaleLevel-1];
+				break;
+			case LevelScale.SUBTRACT:
+				this.BaseValue -= LevelScaleValues[LevelScaleLevel-1];
+				break;										
+		}
+	}
 	public void AddBase(float value){
 		BaseValue += value;
 	}
@@ -101,6 +136,12 @@ public class Stat{
 		ModifiersWithExpiryTime.Clear();
 	}
 }
+public enum LevelScale {
+	NONE,
+	ADD,
+	MULTIPLY,
+	SUBTRACT
+} 
 public enum StatType { 
 	//PLAYER
 	Health, 
