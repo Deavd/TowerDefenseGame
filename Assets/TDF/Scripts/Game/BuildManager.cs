@@ -146,7 +146,7 @@ public class BuildManager : MonoBehaviour {
             //put it into the panel
             button.transform.SetParent(towerButtonPanelContainer.transform);
             //change button text
-            button.GetComponentsInChildren<Text>()[0].text = tower.name;
+            button.GetComponentsInChildren<Text>()[0].text = tower.displayName;
             id++;
         }
     }
