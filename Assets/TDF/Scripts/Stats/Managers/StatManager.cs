@@ -14,6 +14,31 @@ public class StatManager : MonoBehaviour {
             return _statDict;
         }
     }
+	public bool CanLevelUp(){
+		bool state = false;
+		foreach(Stat stat in StatDict.Values){
+			if(stat.CanLevelUP()){
+				state = true;
+			}
+		}
+		return state;
+	}
+	public bool LevelUpAll(){
+		bool state = false;
+		foreach(Stat stat in StatDict.Values){
+			if(stat.LevelUP()){
+				state = true;
+			}
+		}
+		return state;
+	}
+	public bool LevelUp(StatType type){
+		Stat stat;
+		if(StatDict.TryGetValue(type, out stat)){
+			return(stat.LevelUP());
+		}
+		return false;
+	}
 	protected virtual void Awake () {
 	}
 	
