@@ -313,58 +313,60 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AttackSpeed:
     Display: 1
-    Color: {r: 1, g: 1, b: 1, a: 0}
     Name: Attack speed
     Type: 3
     Description: 
-    BaseValue: 0.39
-    Factor: 0
-    BaseFactor: 1
+    BaseValue: 0
+    LevelScale: 0
+    LevelScaleValues: []
   Damage:
     Display: 1
-    Color: {r: 1, g: 0, b: 0, a: 0}
     Name: Damage
     Type: 2
     Description: 
-    BaseValue: 50
-    Factor: 0
-    BaseFactor: 1
+    BaseValue: 0
+    LevelScale: 0
+    LevelScaleValues: []
   Range:
     Display: 1
-    Color: {r: 1, g: 1, b: 1, a: 0}
     Name: Range
     Type: 4
     Description: 
-    BaseValue: 7
-    Factor: 0
-    BaseFactor: 1
+    BaseValue: 0
+    LevelScale: 0
+    LevelScaleValues: []
   BuyPrice:
     Display: 0
-    Color: {r: 0, g: 0, b: 0, a: 0}
     Name: buyprice
     Type: 6
     Description: 
-    BaseValue: 100
-    Factor: 0
-    BaseFactor: 1
+    BaseValue: 0
+    LevelScale: 0
+    LevelScaleValues: []
   SellPrice:
     Display: 0
-    Color: {r: 0, g: 0, b: 0, a: 0}
     Name: sellprice
     Type: 7
     Description: 
-    BaseValue: 80
-    Factor: 0
-    BaseFactor: 1
+    BaseValue: 0
+    LevelScale: 0
+    LevelScaleValues: []
   BuildTime:
     Display: 1
-    Color: {r: 0.986207, g: 1, b: 0, a: 0}
     Name: Build Time
     Type: 5
     Description: 
-    BaseValue: 1
-    Factor: 0
-    BaseFactor: 1
+    BaseValue: 0
+    LevelScale: 0
+    LevelScaleValues: []
+  Effect:
+    Display: 0
+    Name: 
+    Type: 0
+    Description: 
+    BaseValue: 0
+    LevelScale: 0
+    LevelScaleValues: []
 --- !u!114 &114709049967202682
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -378,14 +380,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1
   displayName: Rocket Launcher
-  level: 0
-  maxLevel: 2
-  missile:
-  - {fileID: 1432614511051400, guid: c349208ffa162bf47bb1dd225cc43ecd, type: 2}
-  - {fileID: 1432614511051400, guid: c349208ffa162bf47bb1dd225cc43ecd, type: 2}
-  - {fileID: 1432614511051400, guid: c349208ffa162bf47bb1dd225cc43ecd, type: 2}
+  missile: {fileID: 1432614511051400, guid: c349208ffa162bf47bb1dd225cc43ecd, type: 2}
   TargetType: 2
   Target: {fileID: 0}
+  TowerType: 0
 --- !u!208 &208646148038869306
 NavMeshObstacle:
   m_ObjectHideFlags: 1

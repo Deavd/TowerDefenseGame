@@ -259,61 +259,60 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be2a5820b8462ae4fa31b3410c3ae6e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modifierTest:
+    Time: 0
+    Period: 0
+    hasTime: 0
+    hasPeriod: 0
+    Value: 0
+    isActive: 0
+    statType: 0
+    modifierAddType: 0
   Speed:
     Display: 0
     Name: 
-    Type: 0
+    Type: 9
     Description: 
-    BaseValue: 8
-    Factor: 0
-    BaseFactor: 1
+    BaseValue: 1
     LevelScale: 0
-    LevelScaleLevel: 0
     LevelScaleValues: []
+    modifiers: []
   Damage:
     Display: 0
     Name: 
-    Type: 0
+    Type: 2
     Description: 
     BaseValue: 1
-    Factor: 0
-    BaseFactor: 1
     LevelScale: 0
-    LevelScaleLevel: 0
     LevelScaleValues: []
+    modifiers: []
   Health:
     Display: 0
     Name: 
     Type: 0
     Description: 
-    BaseValue: 50
-    Factor: 0
-    BaseFactor: 1
+    BaseValue: 100
     LevelScale: 0
-    LevelScaleLevel: 0
     LevelScaleValues: []
+    modifiers: []
   MaxHealth:
     Display: 0
     Name: 
-    Type: 0
+    Type: 10
     Description: 
-    BaseValue: 50
-    Factor: 0
-    BaseFactor: 1
+    BaseValue: 100
     LevelScale: 0
-    LevelScaleLevel: 0
     LevelScaleValues: []
+    modifiers: []
   Reward:
     Display: 0
     Name: 
-    Type: 0
+    Type: 11
     Description: 
-    BaseValue: 5
-    Factor: 0
-    BaseFactor: 1
+    BaseValue: 10
     LevelScale: 0
-    LevelScaleLevel: 0
     LevelScaleValues: []
+    modifiers: []
 --- !u!114 &114614981211300748
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -325,8 +324,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3afe69a01d4ff77439fcf9147e859bde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Stats: {fileID: 114307709823611592}
-  healthBar: {fileID: 0}
 --- !u!137 &137722820892091764
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
