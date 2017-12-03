@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+ [System.Serializable]
 public class MapManager : MonoBehaviour {
 	private static MapManager _instance;
 	public static MapManager Instance
@@ -17,7 +18,6 @@ public class MapManager : MonoBehaviour {
 	public Vector3 groundBoundSize;
 
 	public float offset = 0.0f;
-	List<MapObject> mapObjects = new List<MapObject>();
 	private GameObject groundObject;
 	public MapObject[,] Map;
 	public void createMap(int x, int z, int difficulty, GameObject ground){
@@ -49,15 +49,79 @@ public class MapManager : MonoBehaviour {
 			}
 		}
 	}
-	//difficulty[]
-	// Use this for initialization
-	void Start () {
-		
+
+	bool[,] goneThrough;
+	bool top = false;
+	bool bottom = false;
+	int cycles = 0;
+	public bool checkObstruction(int x, int z){
+		top = false;
+		bottom = false;
+		goneThrough = new bool[this.x,this.z]; 
+		return Obstruct(x,z);
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+	private bool Obstruct(int x, int z){
+		if(bottom&&top){
+			return true;
+		}
+			//reched top?
+			if(z == this.z-1){
+				top = true;
+			}else{
+				//get the row on z+1
+				int i = z+1;
+				//go through the 3 fields that could block the way
+				for(int n = -1; n <= 1; n++){
+					//if its out of the map continue
+					if(x+n < 0 || x+n >= this.x){
+						continue;
+					}
+					//otherwise check if its buildable and goneThrough
+					if(!Map[x+n,i].isBuildable && !goneThrough[x+n,i]){
+						//if its buildable mark with goneTHrough
+						goneThrough[x+n,i] = true;
+						//repeat for the next block
+						if(Obstruct(x+n,i)){
+							return true;
+						}
+					}
+				}
+			}
+			if(z == 0){
+				bottom = true;
+			}else{
+				int i = z-1;
+				//same as above, just going down
+				for(int n = -1; n <= 1; n++){
+					if(x+n < 0 || x+n >= this.x){
+						continue;
+					}
+					if(!Map[x+n,i].isBuildable && !goneThrough[x+n,i]){
+						goneThrough[x+n,i] = true;
+						if(Obstruct(x+n,i)){
+							return true;
+						}
+					}
+				}
+			}
+			//and also the block on the side of the building field
+			if(x+1 < this.x){
+				if(!Map[x+1,z].isBuildable && !goneThrough[x+1,z]){
+					goneThrough[x+1,z] = true;
+					if(Obstruct(x+1,z)){
+							return true;
+					}
+				}
+			}
+			if(x-1 > 0){
+				if(!Map[x-1,z].isBuildable && !goneThrough[x-1,z]){
+					goneThrough[x-1,z] = true;
+					if(Obstruct(x-1,z)){
+						return true;
+					}
+				}
+			}
+		return bottom&&top;
 	}
 
 }
