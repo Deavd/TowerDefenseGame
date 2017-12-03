@@ -5,51 +5,79 @@ using UnityEngine.UI;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(EnemyStat)), RequireComponent(typeof(NavMeshAgent))]
-public class Enemy : MonoBehaviour{
+public class Enemy : MonoBehaviour, StatHolder{
 
 	// Use this for initialization
-	public EnemyStat Stats;
-	protected virtual void Awake () {
-		Stats = GetComponent<EnemyStat>();
+	private EnemyStat _stats;
+	public EnemyStat Stats {
+		get{
+			return _stats == null ? Stats = GetComponent<EnemyStat>() : _stats;
+		}
+		set{
+			_stats = value;
+		}
+	}
+	private NavMeshAgent _agent;
+	protected virtual void Awake () {		
 		this.tag = "Enemy";
+		
+		_agent = this.GetComponent<NavMeshAgent>();
+		_HealthBarImage.transform.parent.transform.SetParent(LevelManager.Instance.GameUI.transform, false);
+		_HealthBarImage.transform.parent.transform.position = Camera.main.WorldToScreenPoint(this.transform.position);
 	}
 	
-	public GameObject healthBar;
-	private Image healthBarImage;
-	protected virtual void Start () {
-		this.GetComponent<NavMeshAgent>().speed = Stats.Speed.Value;
-		healthBar = Instantiate(LevelManager.Instance.healthBar);
-		healthBarImage = healthBar.transform.GetChild(0).GetComponent<Image>();
+	private Image _healthBarImage;
+	private Image _HealthBarImage{
+		set{
+			_healthBarImage = value;
+		}
+		get{
+			return _healthBarImage == null ? _healthBarImage = Instantiate(GameObject.Find("Healthbar")).transform.GetChild(0).GetComponent<Image>() : _healthBarImage;
+		}
+	}
 
-		healthBar.transform.SetParent(LevelManager.Instance.GameUI.transform, false);
-		healthBar.transform.position = Camera.main.WorldToScreenPoint(this.transform.position);
-		Stats.Health.BaseValue = Stats.MaxHealth.Value;
-	}
-	
 	// Update is called once per frame
 	protected virtual void Update () {
-		healthBar.transform.position = LevelManager.mainCamera.WorldToScreenPoint(this.transform.position+Vector3.up);
+		_healthBarImage.transform.parent.position = Camera.main.WorldToScreenPoint(this.transform.position+Vector3.up);
 	}
 	public void ReceiveDamage(float dmg){
-		Stats.Health.AddBase(-dmg);
-		if(Stats.Health.Value <= 0){
+		Stats.getStat(StatType.Health).AddBase(-dmg);
+		if(Stats.getStat(StatType.Health).Value <= 0){
 			Die();
 		}
-		healthBarImage.fillAmount = Stats.Health.Value/Stats.MaxHealth.Value;
+		
 		//damage animation
 	}
 	public void Heal(float amount){
 		ReceiveDamage(-amount);
 	}
 	public void Die(){
+		WaveManager.EnemiesAlive--;
 		Destroy(this.gameObject);
-		Destroy(healthBar);
-		LevelManager.Instance.Money += Stats.Reward.Value;
+		Destroy(_healthBarImage.transform.parent.gameObject);
+		LevelManager.Instance.Money += Stats.getStat(StatType.Reward).Value;
 		//die animation
 	}
 	public void Destinated(){
+		WaveManager.EnemiesAlive--;
 		Destroy(this.gameObject);
-		Destroy(healthBar);
-		LevelManager.Instance.Lifes -= (int)Stats.Damage.Value;
+		Destroy(_healthBarImage.transform.parent.gameObject);
+		LevelManager.Instance.Lifes -= (int)Stats.getStat(StatType.Damage).Value;
 	}
+
+    void StatHolder.OnStatChanged(Stat t)
+    {
+		//Debug.Log("Handling event!");
+		//Debug.Log("Stattype is: " + t.Type + ";" +" Statvalue is: "+t.Value);
+        switch(t.Type){
+			case StatType.Health:
+				//Debug.Log(_HealthBarImage.fillAmount);
+				//Debug.Log(Stats.getStat(StatType.Health).Value);
+				_HealthBarImage.fillAmount = t.Value/Stats.getStat(StatType.MaxHealth).Value;
+				break;
+			case StatType.Speed:
+				_agent.speed = t.Value;
+				break;
+		}
+    }
 }
