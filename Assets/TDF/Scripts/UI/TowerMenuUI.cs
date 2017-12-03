@@ -22,8 +22,8 @@ public class TowerMenuUI : MonoBehaviour {
 			//DrawRange();
 		}
 	}
-	Dropdown _drop;
-	Text[] _childTexts;
+	private Dropdown _drop;
+	private Text[] _childTexts;
 	void Awake(){
 		_childTexts = TowerGUI.GetComponentsInChildren<Text>();
 		_drop = TowerGUI.GetComponentInChildren<Dropdown>();
@@ -34,15 +34,20 @@ public class TowerMenuUI : MonoBehaviour {
 	public void clickSell(){
 		if(selectedMapObj== null){return;}
 		LevelManager.Instance.Money += selectedMapObj.Tower.Stats.SellPrice.Value;
-		Destroy(selectedMapObj.Tower.gameObject);
+		selectedMapObj.Tower.Sell();
 		selectedMapObj.isBuildable = true;
-		UnloadTowerGui();
+		UnloadTowerGui();		
 	}
 	public void clickBuy(){
 		if(selectedMapObj== null){return;}
 		Tower t = selectedMapObj.Tower;
-		if(t.Upgrade()){			
-			LevelManager.Instance.Money -= t.Stats.BuyPrice.Value;
+		float price = t.Stats.BuyPrice.GetLevelScaleAddValue();
+		if(LevelManager.Instance.Money < price){
+			ShowMessage.Instance.WriteMessageAt("Not enough money!", Input.mousePosition, MessageType.ERROR, 12, 0.3f);
+		}else{
+			if(t.Upgrade()){			
+				LevelManager.Instance.Money -= t.Stats.BuyPrice.Value;
+			}
 		}
 		LoadTowerGui(selectedMapObj);
 	}
@@ -57,7 +62,8 @@ public class TowerMenuUI : MonoBehaviour {
 					text.text = t.Stats.SellPrice.Value + "$ SELL";
 					break;
 				case "UPGRADE_txt":
-					text.text = t.Stats.BuyPrice.Value + "$ Upgrade";
+					float price = t.Stats.BuyPrice.GetLevelScaleAddValue();
+					text.text = price == -1f ? "-" : price + "$ Upgrade";
 					text.GetComponentInParent<Button>().interactable = t.Stats.CanLevelUp();
 					break;
 				case "INFO_txt":
@@ -68,28 +74,19 @@ public class TowerMenuUI : MonoBehaviour {
 							float scaleValue = stat.GetLevelScaleAddValue();
 							text.text += ColorString(stat.Name+": ", "#66ff00ff")
 								+ColorString(stat.Value.ToString(), "#ff0000ff") 
-								+ (scaleValue != 0f ? ColorString(" (" +scaleValue+")", "#ff5500ff") : "NOPE")
+								+ (scaleValue != -1f ? ColorString(" (" +scaleValue+")", "#ff5500ff") : "")
 								+ System.Environment.NewLine;
 						}
-					}
-					/*+ColorString("DPS: ","#66ff00ff")
-						+ColorString((t.Stats.Damage.Value/t.Stats.AttackSpeed.Value).ToString(), "#ff0000ff") 
-						+ System.Environment.NewLine
-					+ColorString("Range: ","#66ff00ff")
-						+ColorString(t.Stats.Range.Value.ToString()+"m", "#ff0000ff")
-						+ColorString((ScaleValue = t.Stats.Range.GetLevelScaleValue()) == 0f ? "" : " ("+ScaleValue+")", "#ff5500ff")
-						+ System.Environment.NewLine
-					+ColorString("Level: ","#66ff00ff")
-						+ColorString((t.level+1).ToString(), "#ff0000ff") 
-						+ System.Environment.NewLine
-					+ColorString("Build Time: ","#66ff00ff")
-						+ColorString(t.Stats.BuildTime.Value.ToString()+"s", "#ff0000ff") 
-						+ System.Environment.NewLine;*/
-					
+					}					
 					break;
 				case "TARGETTYPE_txt":
-					text.text = t.TargetType.ToString();
-					_drop.value = (int)t.TargetType;
+					if(t.TowerType == TowerTypes.NORMAL){
+						_drop.gameObject.SetActive(true);
+						text.text = t.TargetType.ToString();
+						_drop.value = (int)t.TargetType;
+					}else{
+						_drop.gameObject.SetActive(false);
+					}
 					break;
 			}
 		}
