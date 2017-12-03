@@ -3,23 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraMovement : MonoBehaviour {
-	float zoom = 9f;
-	public float maxZoom = 12f;
-	public float minZoom = 3f;
-	float zoomSpeed = 10f;
-	float speed = 0.2f;
-	float moveOffset = 1f;
+	private float _zoom = 9f;
+	public float _maxZoom = 12f;
+	public float _minZoom = 3f;
+	private float _zoomSpeed = 10f;
+	private float _speed = 0.2f;
+	private float _moveOffset = 1f;
 
-	float minX = 0;
-	float minZ = -1;
-	float maxX = 19;
-	float maxZ =  5;
+	private float _minX = 0;
+	private float _minZ = -1;
+	private float _maxX = 19;
+	private float _maxZ =  5;
 
-	float distance;
-	Vector3 dest;
-	void Start () 
+	private Vector3 _dest;
+	void Awake () 
 	{
-		dest = Camera.main.transform.position;
+		_dest = Camera.main.transform.position;
 	}
 	void Update () 
 	{
@@ -27,34 +26,34 @@ public class CameraMovement : MonoBehaviour {
 		int x = (int) mousePos.x;
 		int y = (int) mousePos.y;
 
-		if(mousePos.x < moveOffset)
+		if(mousePos.x < _moveOffset)
 		{
-			dest.x = Mathf.Clamp(dest.x-speed, minX, maxX);
+			_dest.x = Mathf.Clamp(_dest.x-_speed, _minX, _maxX);
 		}
-		else if(x > Screen.width - moveOffset) 
+		else if(x > Screen.width - _moveOffset) 
 		{
-			dest.x = Mathf.Clamp(dest.x+speed, minX, maxX);
+			_dest.x = Mathf.Clamp(_dest.x+_speed, _minX, _maxX);
 		}
-		if(mousePos.y < moveOffset)
+		if(mousePos.y < _moveOffset)
 		{
 			//mousepos is at the bottom
 			//move down
-			dest.z = Mathf.Clamp(dest.z-speed, minZ, maxZ);
+			_dest.z = Mathf.Clamp(_dest.z-_speed, _minZ, _maxZ);
 		}
-		else if(y > Screen.height - moveOffset) 
+		else if(y > Screen.height - _moveOffset) 
 		{
-			dest.z = Mathf.Clamp(dest.z+speed, minZ, maxZ);
+			_dest.z = Mathf.Clamp(_dest.z+_speed, _minZ, _maxZ);
 		}
 		if(Input.GetAxis("Mouse ScrollWheel") != 0f)
 		{
-			zoom -= Input.GetAxis("Mouse ScrollWheel") * zoomSpeed;
-     		zoom = Mathf.Clamp(zoom, minZoom, maxZoom);
-			dest.y = zoom;		
+			_zoom -= Input.GetAxis("Mouse ScrollWheel") * _zoomSpeed;
+     		_zoom = Mathf.Clamp(_zoom, _minZoom, _maxZoom);
+			_dest.y = _zoom;		
 		}
-		Vector3 s = transform.position-dest;
+		Vector3 s = transform.position-_dest;
 		if(s.magnitude >= 0.02)
 		{
-        	transform.position = Vector3.Lerp(transform.position, dest, 4f * Time.deltaTime);
+        	transform.position = Vector3.Lerp(transform.position, _dest, 4f * Time.deltaTime);
 		}
 	}
 
