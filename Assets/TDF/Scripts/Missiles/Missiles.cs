@@ -8,11 +8,10 @@ public class Missiles : MonoBehaviour {
 	public float damage;
 	public float accuracy;
 	public float speed;
+	private bool _hasEffect = false;
+	private Stat _effectStat;
+	private StatModifier _statModifier;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
 	//Wird aufgerufen wenn die Missile erstellt wird
 	public void Shoot(GameObject target, float damage){
 		this.damage = damage;
@@ -42,7 +41,31 @@ public class Missiles : MonoBehaviour {
 		if(!hasTarget){
 			return;
 		}
+
 		Enemy e = target.GetComponent<Enemy>();
+		if(_hasEffect){
+			e.Stats.addTimeModifierToStat( _statModifier);
+			/*switch(_effectType){
+				case EffectTypes.SLOW:
+					//Debug.Log("ADDING SLOW EFFECT!");
+					//Debug.Log("CURRENT HEALTH: "+ e.Stats.getStat(StatType.Health).Value);
+					e.Stats.addModifierToStat(_effectType new StatModifier(StatModifierAddType.PERCENTAGE_MODIFIED, _effectStat.Value).withTime(1f));
+					break;
+				case EffectTypes.DAMAGE_OVER_TIME:
+					//Debug.Log("ADDING DAMAGE OVER TIME EFFECT!");
+					e.Stats.addModifierToStat(StatType.Speed, new StatModifier(StatModifierAddType.VALUE_MODIFIED, _effectStat.Value).withTime(2f).withPeriod(0.1f));
+					break;
+			}*/
+		}
+
         e.ReceiveDamage(damage);
 	}
+	public void addEffect(StatModifier mod){
+		_hasEffect = true;
+		_statModifier = mod;
+	}
+}
+public enum EffectTypes{
+	SLOW,
+	DAMAGE_OVER_TIME
 }
