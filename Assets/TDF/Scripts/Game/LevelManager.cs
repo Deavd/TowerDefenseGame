@@ -12,7 +12,7 @@ public class LevelManager : MonoBehaviour
     {
         get
         {
-            return (_instance == null ? _instance = FindObjectOfType<LevelManager>() : _instance) == null ? new GameObject().AddComponent<LevelManager>(): _instance;
+            return (_instance == null ? _instance = FindObjectOfType<LevelManager>() : _instance) == null ? _instance = new GameObject().AddComponent<LevelManager>(): _instance;
         }
     }
     public GameObject RangeUI;              //addfromscene
@@ -24,8 +24,8 @@ public class LevelManager : MonoBehaviour
 
     public static Camera mainCamera;
     //the time the level started
-    private float startTime;                //timeTheLevelStarted
-    private float disTime;
+    private float _startTime;                //timeTheLevelStarted
+    private float _disTime;
 
     public static bool IsGameOver { get; set; }
     public static bool IsPaused { get; set; }
@@ -89,21 +89,21 @@ public class LevelManager : MonoBehaviour
     }
     public GameObject GameOverGui;
 
-    bool _defeatEffect = false;
+    private bool _defeatEffect = false;
 
-    PostProcessingBehaviour _postProcess;
-    ColorGradingModel _postColorGrading;
-    ColorGradingModel.Settings _postColorGradingSettings;
-    float _fadeSaturation = 1.0f;
-    float timescale = 1;
-    RectTransform _rect;
+    private PostProcessingBehaviour _postProcess;
+    private ColorGradingModel _postColorGrading;
+    private ColorGradingModel.Settings _postColorGradingSettings;
+    private float _fadeSaturation = 1.0f;
+    private float _timescale = 1;
+    private RectTransform _rect;
     void Update()
     {
         UpdateTimer();
         if(_defeatEffect){
-            _rect.localScale = new Vector3(1-timescale,1-timescale,1-timescale);
+            _rect.localScale = new Vector3(1-_timescale,1-_timescale,1-_timescale);
             if(Time.timeScale > 0f){
-                timescale =Time.timeScale = Mathf.Clamp(Time.timeScale-0.01f, 0,1);
+                _timescale =Time.timeScale = Mathf.Clamp(Time.timeScale-0.01f, 0,1);
             }else if(Time.timeScale == 0){
                 _defeatEffect = false;
             }
@@ -157,7 +157,7 @@ public class LevelManager : MonoBehaviour
     {
         Money = _money;        
         MapManager.Instance.createMap(mapSizeX, mapSizeZ, levelDifficulty, mapGroundObject);
-        startTime = Time.time;
+        _startTime = Time.time;
         SwitchToScreen(TDScreen.HUD);
     }
 
@@ -166,9 +166,9 @@ public class LevelManager : MonoBehaviour
     {
         if (!IsPaused && !IsGameOver)
         {
-            disTime = Time.time - startTime;
-            string min = Mathf.Floor(disTime / 60).ToString("00");
-            string sec = (disTime % 60).ToString("00");
+            _disTime = Time.time - _startTime;
+            string min = Mathf.Floor(_disTime / 60).ToString("00");
+            string sec = (_disTime % 60).ToString("00");
             gameTimerText.text = min + ":" + sec;
         }
     }
