@@ -20,7 +20,7 @@ public class ClickHandler : MonoBehaviour
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
 
-        if (Physics.Raycast(ray, out hit, 105f, LayerMask.GetMask("clickableObj")))
+        if (Physics.Raycast(ray, out hit, 105f, LayerMask.GetMask("Map")))
         {
             if (lastHit != null)
             {
