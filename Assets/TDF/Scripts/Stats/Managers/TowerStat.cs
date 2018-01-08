@@ -9,6 +9,7 @@ public class TowerStat : StatManager {
 	public Stat BuyPrice;
 	public Stat SellPrice;
 	public Stat BuildTime;
+	public Stat Effect;
 	protected override void Awake () {
 		addStat(StatType.AttackSpeed, AttackSpeed);
 		addStat(StatType.Damage, Damage);
@@ -16,6 +17,7 @@ public class TowerStat : StatManager {
 		addStat(StatType.BuyPrice, BuyPrice);
 		addStat(StatType.SellPrice, SellPrice);
 		addStat(StatType.BuildTime, BuildTime);
+		addStat(StatType.Effect, Effect);
 		base.Awake();
 	}
 }

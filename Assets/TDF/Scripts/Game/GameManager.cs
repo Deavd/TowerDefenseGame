@@ -6,13 +6,12 @@ public class GameManager : MonoBehaviour
     public GameObject mapGroundObject; //prefab
     public int mapSizeX, mapSizeZ, levelDifficulty;  //predefinded
 
-    private int selectedLevel;
     void Start()
     {
-        startLevel(selectedLevel);
+        startLevel();
     }
 
-    private void startLevel(int selectedLevel)
+    private void startLevel()
     {
         LevelManager.Instance.StartLevel(mapSizeX,mapSizeZ,levelDifficulty,mapGroundObject);
     }
