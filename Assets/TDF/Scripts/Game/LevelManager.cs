@@ -62,6 +62,7 @@ public class LevelManager : MonoBehaviour
     }
     void Awake()
     {
+        //definiere Startvariabeln
         Lifes = _lifes;
 
         mainCamera =  Camera.main;
@@ -80,8 +81,10 @@ public class LevelManager : MonoBehaviour
     }
     public void Defeat()
     {
+        //wird beim Verlieren aufgerufen
         IsGameOver = true;
         _defeatEffect = true;
+        //wechsle Fenster
         SwitchToScreen(TDScreen.GAME_OVER);
     }
     public GameObject GameOverGui;
@@ -120,6 +123,7 @@ public class LevelManager : MonoBehaviour
     }
     public void Win()
     {
+        //wird beim Gewinnen des Spiels aufgerufen
         IsGameOver = true;
         _defeatEffect = true;
         SwitchToScreen(TDScreen.WIN);
@@ -131,23 +135,28 @@ public class LevelManager : MonoBehaviour
     public CanvasGroup WinScreen;
 
     void initScreens(){
+        //lädt alle Screens
         Screens.Add(TDScreen.GAME_OVER, GameOverScreen);
         Screens.Add(TDScreen.HUD, HUD);
         Screens.Add(TDScreen.PAUSE, PauseScreen);
         Screens.Add(TDScreen.WIN, WinScreen);
     }
     public void SwitchToScreen(TDScreen screen){
+        //Funktion um zu einem Screen zu wechseln
         foreach(CanvasGroup canvas in Screens.Values){
             if(canvas == Screens[screen]){
                 continue;
             }
+            //setzte deaktiviere alle anderen Screens
             canvas.interactable = false;
             canvas.gameObject.SetActive(false);
         }
+        //aktiviere diesen Screen
         Screens[screen].interactable = true;
         Screens[screen].gameObject.SetActive(true);
     }
     public void PauseGame(){
+        ///wird über Button geöffnet
         IsPaused = !IsPaused;
         Time.timeScale = IsPaused ? 0f:1f;
         PauseScreen.alpha = IsPaused ? 1f:0f;

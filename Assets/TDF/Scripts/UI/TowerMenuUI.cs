@@ -17,11 +17,6 @@ public class TowerMenuUI : MonoBehaviour {
             return (TowerMenuUI)FindObjectOfType(typeof(TowerMenuUI));
         }
     }
-	void Update () {
-		if(selectedMapObj != null){
-			//DrawRange();
-		}
-	}
 	private Dropdown _drop;
 	private Text[] _childTexts;
 	void Awake(){
@@ -39,15 +34,19 @@ public class TowerMenuUI : MonoBehaviour {
 		UnloadTowerGui();		
 	}
 	public Material[] LevelMaterial;
+	//Wird beim Drücken des Kaufen-Buttons aufgerufen
 	public void clickBuy(){
+		//wenn kein Objekt markiert ist wird abgebrochen
 		if(selectedMapObj== null){return;}
 		Tower t = selectedMapObj.Tower;
 		float price = t.Stats.BuyPrice.GetLevelScaleAddValue();
-		if(LevelManager.Instance.Money > price){
+		//wenn der Spieler nicht genug Geld hat, wird eine Fehlernachticht ausgegeben
+		if(LevelManager.Instance.Money < price){
 			ShowMessage.Instance.WriteMessageAt("Not enough money!", Input.mousePosition, MessageType.ERROR, 12, 0.3f);
 		}else{
-			if(t.Upgrade()){			
-				Debug.Log("2");
+			//im anderen Fall wird der Turm verbessert
+			if(t.Upgrade()){		
+				//hier wird die Materialfarbe nach jedem Update angepasst
 				Renderer[] renderComponents = t.GetComponentsInChildren<Renderer>();
 				for(int i = 0; i < renderComponents.Length; i++)
 				{
@@ -69,15 +68,20 @@ public class TowerMenuUI : MonoBehaviour {
 	public GameObject StatText;
 	public GameObject StatBar;
 	private Transform _statContainer;
+	//wird aufgerufen, wenn ein Turm ausgewählt wird, dient der visualisierung seiner Stats
 	public void LoadTowerGui(Tower t){		 
+		//setzte das GUI aktiv
 		TowerGUI.SetActive(true);
 		foreach(Text text in _childTexts){
 			if(text == null){continue;}
+			//gehe durch die Objekte und setzte entsprechend ihre Werte
 			switch(text.name){
 				case "SELL_txt":
+					//im falle des Verkaufen-Textes, wird der Preis gesetzt.
 					text.text = t.Stats.SellPrice.Value + "$ SELL";
 					break;
 				case "UPGRADE_txt":
+					//falls der Turm sich Verbessern lässt, aktiviere den Button und setzte den Preis auf seinen Upgradepreis
 					float price = t.Stats.BuyPrice.GetLevelScaleAddValue();
 					text.text = price == -1f ? "-" : price + "$ Upgrade";
 					text.GetComponentInParent<Button>().interactable = t.Stats.CanLevelUp();
@@ -89,19 +93,12 @@ public class TowerMenuUI : MonoBehaviour {
 					foreach (Transform child in _statContainer.transform) {
 						GameObject.Destroy(child.gameObject);
 					}
+					//zeigt den namen des Turemes and
 					text.text = "<b>"+ColorString(t.displayName,"#64fdd0ff")+"</b>\r\n\r\n\r\n";
-					/*foreach(Stat stat in  t.Stats.StatDict.Values){
-						if(stat.Display){
-							float scaleValue = stat.GetLevelScaleAddValue();
-							text.text += "<b>"+ColorString(stat.Name+":   ", "#64fdd0ff")+"</b>"
-								+ColorString(stat.Value.ToString(), "#ff0000ff") 
-								+ (scaleValue != -1f ? ColorString(" (" +scaleValue+")", "#ff5500ff") : "")
-								+ "\r\n\r\n";
-						}
-					}	*/
-					//Vector3 position = new Vector3(0,0,0);
 					Vector3 position = _statContainer.position;
+					//zeigen die verschiedenen Stats mit Balken
 					foreach(Stat stat in  t.Stats.StatDict.Values){
+						//Abfrage, ob das Stat angezeigt werden soll:
 						if(stat.Display){
 							Transform statText = Instantiate(StatText).transform;
 							statText.SetParent(_statContainer);
@@ -118,6 +115,7 @@ public class TowerMenuUI : MonoBehaviour {
 							Image bar_current = statBar.GetChild(0).GetChild(0).GetComponent<Image>();
 							
 							float value = stat.Value;
+							//hier wird die Bar ensprechen den Optimalwerten angepasst und angezeigt
 							bar_current.fillAmount = GetPercentage(stat.Type, value);
 
 							float scaleValue = stat.GetLevelScaleAddValue();
@@ -132,6 +130,7 @@ public class TowerMenuUI : MonoBehaviour {
 					
 					if(t is AttackTower){
 						AttackTower attackTower = (AttackTower)t;
+						//falls der Turm einen Effekt hat werden diese beschrieben
 						if(attackTower.HasEffect){
 							Transform statText = Instantiate(StatText).transform;
 							statText.SetParent(_statContainer);
@@ -197,6 +196,7 @@ public class TowerMenuUI : MonoBehaviour {
 		return 1;
 	}
 	public void LoadTowerGui(MapObject mapObj){
+		//diese Funktion lädt den Turm und läd dann die GUI des Turmes.
 		Tower t = mapObj.Tower;
 		ShowRangePreview(t.Stats.Range.Value, mapObj.transform.position);
 		selectedMapObj = mapObj;
@@ -210,6 +210,7 @@ public class TowerMenuUI : MonoBehaviour {
 		}
 		
 	}
+	//Deaktiviert die TowerGui wieder
     public void UnloadTowerGui()
     {
 		HideRangePreview();
@@ -225,14 +226,17 @@ public class TowerMenuUI : MonoBehaviour {
     public string ColorString(string s, string c){
 		return "<color="+c+">"+s+"</color>";
 	}
-	public void OpenGui(){
 
-	}
+	//Funktion zum einzeigen der Reichweite des Turmes
 	public void ShowRangePreview(float range, Vector3 pos){
+		//Range wird aktiviert
 		LevelManager.Instance.RangeUI.SetActive(true);
+		//Position wird auf die Position des Turmes gestellt
 		LevelManager.Instance.RangeUI.transform.position = pos + new Vector3(0,0.1f,0);
+		//Hier wird die Range der gemäss der Reichweite skaliert
 		LevelManager.Instance.RangeUI.transform.localScale = range * new Vector3(2,2,0);	
     }
+	//Funktion, die die Reichweite ausblendet
     public void HideRangePreview(){
 		LevelManager.Instance.RangeUI.SetActive(false);
     }

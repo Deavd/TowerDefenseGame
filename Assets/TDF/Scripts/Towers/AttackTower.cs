@@ -19,10 +19,7 @@ public class AttackTower : Tower
 
 
     public GameObject Target;
-    /*private AudioSource ShootSound;
-    protected override void Start(){
-        ShootSound = GetComponent<AudioSource>();
-    }*/
+
     private float _updateTime = 0.01f; //seconds
     private float _lastUpdateTime; 
     private float _lastShootTime; 
@@ -44,8 +41,10 @@ public class AttackTower : Tower
             IsShooting = false;
         }
     }
+    //funktion die ein Gegner auswählt
     IEnumerator TargetEnemy()
     {
+        //suche alle Gegner auf dem Spielfeld
         GameObject[] enemyObjects = GameObject.FindGameObjectsWithTag("Enemy");
 
         GameObject target = null;
@@ -53,6 +52,7 @@ public class AttackTower : Tower
         var farthestDistance = 0f;
         var minHealth = float.MaxValue;
         var maxHealth = 0f;
+        //wähle den Gegner gemässt Enum TargetType aus
         foreach (GameObject enemyObject in enemyObjects){
             float distanceToEnemy = (this.transform.position - enemyObject.transform.position).magnitude;
             if(distanceToEnemy <= Stats.Range.Value){
@@ -87,6 +87,7 @@ public class AttackTower : Tower
         }
         if(target != null){
             if(IsShooting == false){
+                //fange an zu schiessen, wenn der Gegner vorhanden ist
                 StartCoroutine(ShootCycle());
             }
         }
@@ -96,36 +97,44 @@ public class AttackTower : Tower
             StartCoroutine(TargetEnemy());
         }
     }
-    //has movement -> later for buffs etc...
     private float _rotationSpeed = 10f;
+
+    //wird in der Funktion Update aufgerufen
     private void RotateToEnemy()
     {
         if(Target != null){
             Transform towerMain;
+            //hier wird das zu rotierende Objekt gesucht
             if(transform.childCount == 0){
                 towerMain = transform;
             }else{
                 towerMain = transform.GetChild(0);
             }
-            //get the direction
+            //berechene die Richtung
             Vector3 direction = Target.transform.position - towerMain.position;
-            //calc the roation needed to look at the target 
+            //berechne die Rotation die beötigt wird, um zum Ziel zu rotieren
             Quaternion lookRotation = Quaternion.LookRotation(direction);
+            //setzte die Zielposition zur Position des Gegners
             Vector3 targetPos = Target.transform.position;
+            //interpoliere zwischen der Rotation und der ziel Rotation
             towerMain.rotation = Quaternion.Slerp(towerMain.rotation, lookRotation, Time.deltaTime * _rotationSpeed);
             
 
         }
     }
+    //wird nach jeder Periode des Angriffstempo aufgerufen
     public virtual bool AttackEnemy()
     {
         if(Target == null){return false;}
+        //erstelle ein Geschoss
         GameObject missile = (GameObject) Instantiate(Missile, transform.GetChild(0).GetChild(0).position, this.transform.rotation);
         
         if(HasEffect){
+            //falls dieses ein Effekt hat, wird dieser dem Geschoss angefügt
             Effect.Value = Stats.getStat(StatType.Effect).Value;
             missile.GetComponent<Missiles>().addEffect(Effect);
         }
+        //über gebe die Werte an die Funktion Shoot
         missile.GetComponent<Missiles>().Shoot(Target, Stats.Damage.Value, Origin);
         return true;
     }

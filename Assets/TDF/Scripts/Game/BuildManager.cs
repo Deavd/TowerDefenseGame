@@ -116,7 +116,6 @@ public class BuildManager : MonoBehaviour {
         //t.Stats.loadStats();
         TowerMenuUI.Instance.LoadTowerGui(LoadTower());
         //check if player has enough money
-        //if (LevelManager.Instance.Money >= towerObjs[id].GetComponent<Tower>().BuyPrice)
         if (LevelManager.Instance.Money >= LoadTower(id).Stats.BuyPrice.Value)
         {
             //change selected tower

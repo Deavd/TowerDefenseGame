@@ -57,40 +57,49 @@ public class Enemy : MonoBehaviour, StatHolder{
 	public void ReceiveDamage(float dmg, Origin origin = Origin.NORMAL){
 		dmg = getOriginDamage(origin)*dmg;
 		Stats.getStat(StatType.Health).AddBase(-dmg);
-		//damage animation
 	}
 	public void Heal(float amount){
 		ReceiveDamage(-amount);
 	}
+	//wird beim erreichen von <= 0 Leben ausgeführt
 	public void Die(){
+		//spiele Sterbesound ab
 		SoundManager.Instance.PlaySound("deathSound");
+		//erstelle den Sterbeeffekt im Spiel
 		GameObject effect  = Instantiate(DeathEffect, transform.position, Quaternion.identity);
 		WaveManager.EnemiesAlive--;
+		//zerstöre alles im zusammenhang mit diesem Gegner
 		Destroy(this.gameObject);
 		Destroy(effect, 2f);
 		Destroy(_healthBarImage.transform.parent.gameObject);
 		LevelManager.Instance.Money += Stats.getStat(StatType.Reward).Value;
 	}
+	//wird beim Ankommen des Gegners aufgerufen
 	public void Destinated(){
+		//Gegner ist angekommen
 		WaveManager.EnemiesAlive--;
 		Destroy(this.gameObject);
 		Destroy(_healthBarImage.transform.parent.gameObject);
 		LevelManager.Instance.Lifes -= (int)Stats.getStat(StatType.Damage).Value;
 	}
 
+	//Event, dass aufgerufen wird, wenn ein Stat sich im Wert ändern
 	void StatHolder.OnStatChanged(Stat t)
 	{
 		switch(t.Type){
 			case StatType.MaxHealth:
+				//setzte Leben auf das maximale Leben
 				Stats.Health.BaseValue = t.Value;
 				break;
 			case StatType.Health:
+				//passe die Healthbar an das Leben an
 				_HealthBarImage.fillAmount = t.Value/Stats.getStat(StatType.MaxHealth).Value;
 				if(Stats.getStat(StatType.Health).Value <= 0){
 					Die();
 				}
 				break;
 			case StatType.Speed:
+				//setzte die Geschwindigkeit
 				_agent.speed = t.Value;
 				break;
 		}

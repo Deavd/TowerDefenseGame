@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
 
     private void startLevel()
     {
+        //starten des Levels
         LevelManager.Instance.StartLevel(mapSizeX,mapSizeZ,levelDifficulty,mapGroundObject);
     }
     public void EndGame(){

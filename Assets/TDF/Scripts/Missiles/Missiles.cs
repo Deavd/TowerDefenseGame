@@ -28,7 +28,6 @@ public class Missiles : MonoBehaviour {
 	}
 	
 	public Vector3 lastPos;
-	// Update is called once per frame
 	MeshRenderer _mesh;
 	void Update () {
 		if(hasHit){
@@ -42,11 +41,10 @@ public class Missiles : MonoBehaviour {
 			return;
 		}
 		distance = (targetPos - this.transform.position).sqrMagnitude;
-		//Wenn die Distanz Zwischen Objekt und Ziel kleiner als die Strecke ist, die das Objekt zurücklegt, dann zerstöre es
+		//wenn die Distanz Zwischen Objekt und Ziel kleiner als die Strecke ist, die das Objekt zurücklegt, dann zerstöre es
 		if(distance <= speed * speed * Time.deltaTime * Time.deltaTime){
 			hasHit = true;
 			_shootSound.Play();
-			//this.gameObject.SetActive(false);
 			if(_mesh != null){
 				_mesh.enabled = false;
 			}
@@ -55,10 +53,11 @@ public class Missiles : MonoBehaviour {
 			return;
 		}
 		this.transform.LookAt(targetPos);
-		//Bewege das Objekt in Richtung des Ziels
+		//bewege das Objekt in Richtung des Ziels
 		this.transform.Translate(Time.deltaTime * speed * (targetPos - this.transform.position).normalized, Space.World);
 		lastPos = targetPos;
 	}
+	//wenn der Gegner getroffen wurde, wird dieses Event aufgerufen
 	public virtual void  OnEnemyHit(bool hasTarget){
 		if(!hasTarget){
 			return;
@@ -66,17 +65,21 @@ public class Missiles : MonoBehaviour {
 		PlayParticleEffect(hasTarget);
 		Enemy e = target.GetComponent<Enemy>();
 		if(_hasEffect){
+			//falls ein Effekt vorhanden ist, übergebe diesen an den Gegner
 			e.Stats.addTimeModifierToStat(_statModifier);
 		}
         e.ReceiveDamage(damage, origin);
 	}
 	public  void PlayParticleEffect(bool hasTarget){
+		//spielt ein Impact-Effekt ab
+		//setzte Impact-Position
 		Vector3 impactPos = hasTarget ? target.transform.position : lastPos;
 		impactPos.y += 0.25f;
 		GameObject impacteffect = Instantiate(ParticleEffect, impactPos, Quaternion.Euler(90, 0, 0));
 		Destroy(impacteffect,0.4f);
 	}
 	public void addEffect(StatModifier mod){
+		//Effekt der übergeben wird an das Geschoss, der später dem Gegner übergeben wird
 		_hasEffect = true;
 		_statModifier = mod;
 	}

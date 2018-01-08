@@ -16,9 +16,13 @@ public class ShowMessage : MonoBehaviour {
             return (_instance == null ? _instance = FindObjectOfType<ShowMessage>() : _instance) == null ? _instance = new GameObject().AddComponent<ShowMessage>(): _instance;
         }
     }
+	//Diese Funktion wird zum Aufzeigen von Nachrichten auf dem Bildschirm verwendet
 	public void WriteMessageAt(string s, Vector2 pos, MessageType type = MessageType.INFO, int fontSize = 12, float time = 0.5f, Color? textColor = null, Color? imageColor = null){
+		//neues Bild wird erstellt und Text
 		Image image = Instantiate(TextHolder, pos, Quaternion.identity).GetComponent<Image>();
 		Text text = image.transform.GetChild(0).GetComponent<Text>();
+
+		//hier werden die Farben definiert
 		text.color = textColor.GetValueOrDefault(Color.white);
 		image.transform.SetParent(this.transform);
 		text.text = s;
@@ -37,6 +41,7 @@ public class ShowMessage : MonoBehaviour {
 				image.color = imageColor.GetValueOrDefault(Info);
 				break;
 		}
+		//Anzeige wird wieder nach der Zeit time deaktiviert
 		StartCoroutine(fadeOut(image, text, time));
 	}
 	IEnumerator fadeOut(Image image, Text text, float time){
@@ -44,6 +49,7 @@ public class ShowMessage : MonoBehaviour {
 		float decrease = 1f/25f;
 		float a = image.color.a;
 
+		//sanftes ausblenden indem Alpha-Werte zunehmend kleiner werden
 		Color imageC = image.color;
 		Color textC = text.color;
 		int i = 0;

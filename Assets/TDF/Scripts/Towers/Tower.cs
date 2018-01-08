@@ -44,16 +44,21 @@ public class Tower : MonoBehaviour, StatHolder
     }
     public bool active = false;
 
-
+    //Diese Funktion dient der Anwendung der Auraeffekte der Auratürme die schon auf der Map sind
     public virtual void Build(){
+        //aktiviere den NavMeshObstace damit Gegner dem Turm ausweichen
         navMeshObstacle.enabled = true;
+        //Abfrage ob es sich um einen normalen Turm also Angriffsturm handel.
         if(TowerType == TowerTypes.NORMAL){
+            //Lese alle Objekte aus der Szene heraus die den Tag "Tower" haben
             GameObject[] towerObjects = GameObject.FindGameObjectsWithTag("Tower");
             foreach(GameObject towerObject in towerObjects){
                 Tower t = towerObject.GetComponent<Tower>();                
                 if(t.TowerType == TowerTypes.AURA){
                     float distance = (this.transform.position - towerObject.transform.position).magnitude;  
                     if(distance <= t.Stats.Range.Value){
+                         //wenn es sich um einen Auraturm handle und er in Reichweite ist,
+                         //werden dem Turm seine Effekte zugewiesen:
                         foreach(StatModifier mod in ((AuraTower) t).TowerModifiers){
                             if(Stats.hasStat(mod.statType)){
                                 Stats.addModifierToStat(mod);

@@ -79,6 +79,7 @@ public class WaveManager : MonoBehaviour
         }
     }
     public static int EnemiesAlive = 0;
+    //wird genauer in der Arbeit beschrieben
     IEnumerator SpawnWave(String s, int waveID)
     {
         _wavePrefix = "Wave ends in: ";

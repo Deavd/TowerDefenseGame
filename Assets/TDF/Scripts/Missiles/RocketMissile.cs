@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class RocketMissile : Missiles {
 
-	// Use this for initialization
 	public override void OnEnemyHit(bool hasTarget){
 		PlayParticleEffect(hasTarget);
 		GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");

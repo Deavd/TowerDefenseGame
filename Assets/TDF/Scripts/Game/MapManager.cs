@@ -39,13 +39,10 @@ public class MapManager : MonoBehaviour {
 				GameObject ground = Instantiate(groundObject);
 				ground.transform.position = getPosition(i,i2);
 				ground.transform.parent = this.gameObject.transform;
-				//no ändere
 				MapObject mapObj = ground.GetComponent<MapObject>();
 				mapObj.posX = i;
 				mapObj.posZ = i2;
 				Map[i,i2] = mapObj;
-				//MapObject obj = new MapObject(i,i2,ground,MapObjectType.GROUND);
-				//mapObjects.Add(obj);
 			}
 		}
 	}

@@ -23,14 +23,16 @@ public class MapObject : MonoBehaviour, IPointerClickHandler
         _renderer = this.GetComponent<Renderer>();
         _color = _renderer.material.color;
     }
-
+    //wird aufgerufen wenn mit der Maus das Feld verlassen wird
     void OnMouseExit()
     {
+        //setzt die Farbe zurück
 		this.GetComponent<Renderer>().material.color = _color;
     }
+    //wird aufgerufen wenn mit der Maus über ein Feld gefahren wird
     void OnMouseEnter()
     {
-       
+       //Setzt die Farbe enstpechend
         if (BuildManager.selectedTower != -1)
         {
 			if(isBuildable && !MapManager.Instance.checkObstruction(posX,posZ)){
@@ -54,21 +56,21 @@ public class MapObject : MonoBehaviour, IPointerClickHandler
             if (isBuildable)
             {
                 if(!MapManager.Instance.checkObstruction(posX,posZ)){
+                    // wenn das Feld bebaubar ist und der Weg frei ist, wird ein Turm Platziert
                     Tower towerObj = BuildManager.Instance.PlaceTower(posX, posZ);
                     if (towerObj != null)
                     {
                         _renderer.material.color = new Color(1, 1, 1, 1);
                         isBuildable = false;
                         this.Tower = towerObj;
+                        //Turm Informationen werden angezeigt
                         TowerMenuUI.Instance.LoadTowerGui(this);
                     }
                 }else{
-                    ShowMessage.Instance.WriteMessageAt("Cannot place a tower here!", eventData.position,MessageType.WARNING, 14, 0);
-                    //Cannot play in the path of the enemies
+                    ShowMessage.Instance.WriteMessageAt("Cannot place a tower here!", eventData.position,MessageType.WARNING, 14, 0);                    
                 }
             }else{
                 ShowMessage.Instance.WriteMessageAt("Cannot place a tower here!", eventData.position, MessageType.WARNING, 14, 0);
-                //cannot build here
             }
         }else{
             if(Tower != null){

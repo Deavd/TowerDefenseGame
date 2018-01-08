@@ -24,7 +24,6 @@ public class EnemyPreview : MonoBehaviour{
 		}
 	}
 
-	// Update is called once per frame
 	protected virtual void Update () {
 		_healthBarImage.transform.parent.position = Camera.main.WorldToScreenPoint(this.transform.position+Vector3.up);
 	}
@@ -38,8 +37,6 @@ public class EnemyPreview : MonoBehaviour{
 		if(health <= 0){
 			StartCoroutine(Die());
 		}
-		
-		//damage animation
 	}
 	IEnumerator Die(){
 		isDead = true;
