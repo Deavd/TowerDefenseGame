@@ -23,6 +23,7 @@ public class CameraMovement : MonoBehaviour {
 	Vector2 startPos;
 	void Update () 
 	{  
+		//Beschreibung in der Arbeit
 		Vector2 mousePos = Input.mousePosition;
 		if(Input.GetMouseButtonDown(0)){
 			startPos = mousePos;
@@ -36,7 +37,7 @@ public class CameraMovement : MonoBehaviour {
 		}
 		int x = (int) mousePos.x;
 		int y = (int) mousePos.y;
-
+		//falls die Maus sich am Rand des SPielfeldes befindet, wird die Kamera enstprechend bewegt.
 		if(mousePos.x < _moveOffset)
 		{
 			_dest.x = Mathf.Clamp(_dest.x-_speed, _minX, _maxX);
@@ -47,8 +48,6 @@ public class CameraMovement : MonoBehaviour {
 		}
 		if(mousePos.y < _moveOffset)
 		{
-			//mousepos is at the bottom
-			//move down
 			_dest.z = Mathf.Clamp(_dest.z-_speed, _minZ, _maxZ);
 		}
 		else if(y > Screen.height - _moveOffset) 

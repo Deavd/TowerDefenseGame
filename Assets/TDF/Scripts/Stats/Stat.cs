@@ -11,6 +11,8 @@ public class Stat{
 	StringBuilder displayName;
 	public string Name{
 		get{
+			// Funktion die aus dem Stattype-String einen Namen macht
+			// z.B testObject -> Test Object
 			if(!String.IsNullOrEmpty(name)){
 				return name;
 			}
@@ -18,7 +20,9 @@ public class Stat{
 			displayName = new StringBuilder(typeName.Length+3);
 			displayName.Append(typeName[0]);
 			for (int i = 1; i < typeName.Length; i++){
+				//starte beim 2. Buchstabe
 				if (char.IsUpper(typeName[i]) && typeName[i - 1] != ' '){
+					//wenn dieser Gross geschrieben ist füge ein Leerzeichen hinzu
 					displayName.Append(' ');
 				}
 				displayName.Append(typeName[i]);
@@ -55,6 +59,7 @@ public class Stat{
 	public delegate void ValueChangedEventHandler(object source, EventArgs args);
 	public event ValueChangedEventHandler ValueChanged;
 	bool _init = false;
+	//initialisierung, setzt Startwerte
 	public void Init(){
 		_init = true;
 		_factor = 1;
@@ -98,6 +103,7 @@ public class Stat{
 		}
 		return false;
 	}
+	//funktion die den Wert ausrechnet die der Stat haben würde, wenn man ihn Verbessert
 	public float GetLevelScaleAddValue(){
 		if(!CanLevelUP()){
 			return -1f;
@@ -115,6 +121,7 @@ public class Stat{
 				return -1f;
 		}
 	}
+	//funtkion die den Stat enstprechend ders LevelScales verbesser 
 	public void UpdateLevelScaling(){
 		switch(LevelScale){
 			case LevelScale.ADD:
@@ -139,9 +146,12 @@ public class Stat{
 	public bool hasModifier(StatModifier mod){
 		return Modifiers.Contains(mod);
 	}
+	//hinzufügen eines Modifiers
 	public void AddModifier(StatModifier mod)
 	{	
+		//Modifier wird der Liste der aktiven Modifiers hinzugefügt
 		Modifiers.Add(mod);
+		//anpassen der Werte
 		switch(mod.modifierAddType){
 			case StatModifierAddType.PERCENTAGE_BASE:
 				this._baseFactor = mod.Value * this._baseFactor;
@@ -158,13 +168,14 @@ public class Stat{
 		}
 		OnValueChanged();	
 	}
+	//entfernen eines Modifiers
 	public void RemoveModifier(StatModifier mod)
 	{	
+		//der Modifier wird erstmal aus der Liste der aktiven Modifiers enfernt
 		Modifiers.Remove(mod);
-		//Modifiers.Remove(mod);
+		//Werte werden angepasst
 		switch(mod.modifierAddType){
 			case StatModifierAddType.PERCENTAGE_BASE:
-				//percentage 0-1
 				this._baseFactor = this._baseFactor / mod.Value ;
 				break;
 			case StatModifierAddType.VALUE_BASE:
