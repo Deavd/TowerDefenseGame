@@ -4,20 +4,19 @@ using UnityEngine;
 
 public enum StatModifierAddType{
 	PERCENTAGE_BASE,
-	VALUE_BASE_PERMANENT,
+	VALUE_BASE,
 	PERCENTAGE_MODIFIED,
 	VALUE_MODIFIED
 }
 [System.Serializable]
 public class StatModifier{
+	public string EffectName;
+	public string EffectNameVerb;
 	public float Time;
 	public float Period;
 	public bool hasTime = false;
 	public bool hasPeriod = false;
 	public float Value;
-	public bool isActive = false;
-	public float activatedTime; 
-	public float stackedTime = 0f;
 	public StatType statType;
 
 	public StatModifierAddType modifierAddType;
@@ -31,14 +30,12 @@ public class StatModifier{
 	{
 		this.Time = time;
 		this.hasTime = true;
-		this.isActive = true;
 		return this;
 	}
 	public StatModifier withPeriod(float period)
 	{
 		this.hasPeriod = true;
 		this.Period = period;
-		this.isActive = true;
 		return this;
 	}
 }

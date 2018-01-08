@@ -60,10 +60,8 @@ public class BuildManager : MonoBehaviour {
                 if (Physics.Raycast(_ray, out _hit, 105f, LayerMask.GetMask("Map")))
                 {
                     _towerPreviewLastUpdateTime = Time.time;
-                    //change prevTower position
                     MapObject mapObject = _hit.collider.GetComponent<MapObject>();
                     Vector3 placePosition = MapManager.Instance.getPosition(mapObject.posX,mapObject.posZ);
-                    //placePosition.y = drawingTower.transform.localScale.y/2;
                     _drawingTower.transform.position = placePosition;
                     TowerMenuUI.Instance.ShowRangePreview(LoadTower().Stats.Range.Value, placePosition); 
                 }
@@ -84,7 +82,6 @@ public class BuildManager : MonoBehaviour {
         //check if player has enough money
         //double buyPrice = tower.BuyPrice;
         double buyPrice = LoadTower().Stats.BuyPrice.Value;
-        Debug.Log(buyPrice);
         if (LevelManager.Instance.Money >= buyPrice)
         {
             //handle economy
@@ -113,7 +110,11 @@ public class BuildManager : MonoBehaviour {
     //triggered from listener;; select a tower with button in panel
     public void SelectTower(int id)
     {
-        TowerMenuUI.Instance.UnloadTowerGui();
+        selectedTower = id;
+        //TowerMenuUI.Instance.UnloadTowerGui();
+        Tower t = LoadTower();
+        //t.Stats.loadStats();
+        TowerMenuUI.Instance.LoadTowerGui(LoadTower());
         //check if player has enough money
         //if (LevelManager.Instance.Money >= towerObjs[id].GetComponent<Tower>().BuyPrice)
         if (LevelManager.Instance.Money >= LoadTower(id).Stats.BuyPrice.Value)
@@ -133,16 +134,20 @@ public class BuildManager : MonoBehaviour {
         foreach (GameObject towerObj in TowerList)
         {
             Tower tower = towerObj.GetComponent<Tower>();
+            tower.Stats.loadStats();
             _towers.Add(tower);
             //create button
-            Button button = Instantiate(towerButton).GetComponent<Button>();
+            //Button button = Instantiate(towerButton).GetComponent<Button>();
+            GameObject buttonContainer = Instantiate(tower.Button);
+            Button button = buttonContainer.transform.GetChild(0).GetComponent<Button>();
+            if(button == null){return;}
             //add a listener
             tower.id = id;
             button.onClick.AddListener(() => SelectTower(tower.id));
             //put it into the panel
-            button.transform.SetParent(towerButtonPanelContainer.transform);
+            buttonContainer.transform.SetParent(towerButtonPanelContainer.transform);
             //change button text
-            button.GetComponentsInChildren<Text>()[0].text = tower.displayName;
+            button.GetComponentsInChildren<Text>()[0].text = tower.Stats.BuyPrice.Value.ToString();
             id++;
         }
     }

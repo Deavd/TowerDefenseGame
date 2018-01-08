@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 114750104433860980}
   m_Layer: 0
   m_Name: Tower_Wall 1
-  m_TagString: Untagged
+  m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -125,58 +125,67 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AttackSpeed:
     Display: 0
-    Color: {r: 0, g: 0, b: 0, a: 0}
-    Name: 
-    Type: 0
+    Type: 3
     Description: 
     BaseValue: 0
-    Factor: 0
-    BaseFactor: 0
+    _value: 0
+    LevelScale: 0
+    scaleValues: []
+    Modifiers: []
   Damage:
     Display: 0
-    Color: {r: 0, g: 0, b: 0, a: 0}
-    Name: 
-    Type: 0
+    Type: 2
     Description: 
     BaseValue: 0
-    Factor: 0
-    BaseFactor: 0
+    _value: 0
+    LevelScale: 0
+    scaleValues: []
+    Modifiers: []
   Range:
     Display: 0
-    Color: {r: 0, g: 0, b: 0, a: 0}
-    Name: 
-    Type: 0
+    Type: 4
     Description: 
     BaseValue: 0
-    Factor: 0
-    BaseFactor: 0
+    _value: 0
+    LevelScale: 0
+    scaleValues: []
+    Modifiers: []
   BuyPrice:
     Display: 0
-    Color: {r: 0, g: 0, b: 0, a: 0}
-    Name: 
-    Type: 0
+    Type: 6
     Description: 
     BaseValue: 20
-    Factor: 0
-    BaseFactor: 1
+    _value: 0
+    LevelScale: 0
+    scaleValues: []
+    Modifiers: []
   SellPrice:
     Display: 0
-    Color: {r: 0, g: 0, b: 0, a: 0}
-    Name: 
-    Type: 0
+    Type: 7
     Description: 
     BaseValue: 8
-    Factor: 0
-    BaseFactor: 1
+    _value: 0
+    LevelScale: 0
+    scaleValues: []
+    Modifiers: []
   BuildTime:
     Display: 0
-    Color: {r: 0, g: 0, b: 0, a: 0}
-    Name: Build Time
     Type: 5
     Description: 
     BaseValue: 1
-    Factor: 0
-    BaseFactor: 1
+    _value: 0
+    LevelScale: 0
+    scaleValues: []
+    Modifiers: []
+  Effect:
+    Display: 0
+    Type: 8
+    Description: 
+    BaseValue: 0
+    _value: 0
+    LevelScale: 0
+    scaleValues: []
+    Modifiers: []
 --- !u!114 &114750104433860980
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -188,14 +197,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15dd0ed522cee5a42b6fce874ae218a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 2
+  id: 0
   displayName: Wall
-  level: 0
-  maxLevel: 0
-  Stats: {fileID: 114619982343149936}
-  missile: []
-  TargetType: 0
-  Target: {fileID: 0}
+  Button: {fileID: 1973911361234790, guid: 6c6dc833b0dfa2f46a63d3c9d3cf5377, type: 2}
+  TowerType: 2
+  UpgradeLevel: 0
+  active: 0
 --- !u!208 &208075593578581046
 NavMeshObstacle:
   m_ObjectHideFlags: 1

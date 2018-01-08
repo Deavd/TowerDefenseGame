@@ -8,55 +8,53 @@ using UnityEngine;
 [RequireComponent(typeof(TowerStat)), RequireComponent(typeof(UnityEngine.AI.NavMeshObstacle))]
 public class AttackTower : Tower
 {
+    public bool HasEffect;
+    public TargetTypes TargetType = TargetTypes.CLOSE;
+    public StatModifier Effect;
+    public Origin Origin;
     public GameObject missile;
     public GameObject Missile{
         get{return missile;}
     }
 
-    
 
     public GameObject Target;
-    private float _updateTime = 0.1f; //seconds
+    /*private AudioSource ShootSound;
+    protected override void Start(){
+        ShootSound = GetComponent<AudioSource>();
+    }*/
+    private float _updateTime = 0.01f; //seconds
     private float _lastUpdateTime; 
     private float _lastShootTime; 
     protected virtual void Update(){
 		RotateToEnemy();
-		//if(Time.time > lastShootTime + AttackSpeed /* speed */){
-		/*if(Time.time > _lastShootTime + Stats.AttackSpeed.Value /* speed *//*){
-			_lastShootTime = Time.time;
-			Debug.Log("SHOOTING! NExt in "+ Stats.AttackSpeed.Value+"s");
-			AttackEnemy();
-		}*/
-		if(!active || Time.time - _lastUpdateTime < _updateTime){
-			return;
-		}
-		_lastUpdateTime = Time.time;
-		TargetEnemy();        
     }
-    private bool _isShooting = false;
+    public override void Activate(){
+        base.Activate();
+        StartCoroutine(TargetEnemy());
+    }
+    public bool IsShooting = false;
     IEnumerator ShootCycle(){
         if(AttackEnemy()){
-            _isShooting = true;
+            //ShootSound.Play();
+            IsShooting = true;
             yield return new WaitForSeconds(Stats.AttackSpeed.Value);
-           _isShooting = false;
+           IsShooting = false;
         }else{
-            //is ready to shoot again;
-            _isShooting = false;
+            IsShooting = false;
         }
     }
-    private void TargetEnemy()
+    IEnumerator TargetEnemy()
     {
         GameObject[] enemyObjects = GameObject.FindGameObjectsWithTag("Enemy");
 
         GameObject target = null;
-        //var closestDistance = Range;
         var closestDistance = Stats.Range.Value;
         var farthestDistance = 0f;
         var minHealth = float.MaxValue;
         var maxHealth = 0f;
         foreach (GameObject enemyObject in enemyObjects){
             float distanceToEnemy = (this.transform.position - enemyObject.transform.position).magnitude;
-            //if(distanceToEnemy < Range){
             if(distanceToEnemy <= Stats.Range.Value){
                 float health = enemyObject.GetComponent<Enemy>().Stats.Health.Value;
                 switch(TargetType){
@@ -88,11 +86,15 @@ public class AttackTower : Tower
             }
         }
         if(target != null){
-            if(_isShooting == false){
+            if(IsShooting == false){
                 StartCoroutine(ShootCycle());
             }
         }
         this.Target = target;      
+        yield return new WaitForSeconds(_updateTime);
+        if(active){
+            StartCoroutine(TargetEnemy());
+        }
     }
     //has movement -> later for buffs etc...
     private float _rotationSpeed = 10f;
@@ -118,13 +120,13 @@ public class AttackTower : Tower
     public virtual bool AttackEnemy()
     {
         if(Target == null){return false;}
-        if(transform.childCount == 0){
-            missile = (GameObject) Instantiate(Missile, this.transform.position, this.transform.rotation);
-        }else{
-            missile = (GameObject) Instantiate(Missile, this.transform.GetChild(2).position, this.transform.GetChild(0).rotation);
+        GameObject missile = (GameObject) Instantiate(Missile, transform.GetChild(0).GetChild(0).position, this.transform.rotation);
+        
+        if(HasEffect){
+            Effect.Value = Stats.getStat(StatType.Effect).Value;
+            missile.GetComponent<Missiles>().addEffect(Effect);
         }
-        //missile.GetComponent<Missiles>().Shoot(Target, Damage);     
-        missile.GetComponent<Missiles>().Shoot(Target, Stats.Damage.Value);
+        missile.GetComponent<Missiles>().Shoot(Target, Stats.Damage.Value, Origin);
         return true;
     }
     public void changeTarget(TargetTypes type)

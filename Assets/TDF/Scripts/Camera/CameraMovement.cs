@@ -8,7 +8,7 @@ public class CameraMovement : MonoBehaviour {
 	public float _minZoom = 3f;
 	private float _zoomSpeed = 10f;
 	private float _speed = 0.2f;
-	private float _moveOffset = 1f;
+	private float _moveOffset = 3f;
 
 	private float _minX = 0;
 	private float _minZ = -1;
@@ -20,9 +20,20 @@ public class CameraMovement : MonoBehaviour {
 	{
 		_dest = Camera.main.transform.position;
 	}
+	Vector2 startPos;
 	void Update () 
-	{
+	{  
 		Vector2 mousePos = Input.mousePosition;
+		if(Input.GetMouseButtonDown(0)){
+			startPos = mousePos;
+			return;
+		}
+		if(Input.GetMouseButton(0)){
+			Vector3 positionDelta = Camera.main.ScreenToViewportPoint(startPos-mousePos);
+			_dest = this.transform.position + new Vector3(positionDelta.x * 10f, 0, positionDelta.y * 10f);
+			_dest.x = Mathf.Clamp(_dest.x, _minX, _maxX);
+			_dest.z = Mathf.Clamp(_dest.z, _minZ, _maxZ);
+		}
 		int x = (int) mousePos.x;
 		int y = (int) mousePos.y;
 
@@ -50,10 +61,11 @@ public class CameraMovement : MonoBehaviour {
      		_zoom = Mathf.Clamp(_zoom, _minZoom, _maxZoom);
 			_dest.y = _zoom;		
 		}
+		
 		Vector3 s = transform.position-_dest;
 		if(s.magnitude >= 0.02)
 		{
-        	transform.position = Vector3.Lerp(transform.position, _dest, 4f * Time.deltaTime);
+        	transform.position = Vector3.Lerp(transform.position, _dest, 0.7f* _zoom * Time.deltaTime);
 		}
 	}
 

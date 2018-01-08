@@ -13,8 +13,9 @@ public class MachineGunTower : AttackTower
         }
         GameObject missile = (GameObject) Instantiate(Missile, spawnPoints.GetChild(current).position, this.transform.GetChild(0).rotation);
         //missile.GetComponent<Missiles>().Shoot(Target, Damage);    
-        missile.GetComponent<Missiles>().Shoot(Target, Stats.Damage.Value);    
+        missile.GetComponent<Missiles>().Shoot(Target, Stats.Damage.Value, Origin);    
         current++;
         return true;
     }
+    
 }

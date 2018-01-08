@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
-using TMPro;
 using UnityEngine.PostProcessing;
 public class LevelManager : MonoBehaviour
 {
@@ -17,9 +16,8 @@ public class LevelManager : MonoBehaviour
     }
     public GameObject RangeUI;              //addfromscene
     public Text gameTimerText;              //addfromscene
-    public TextMeshProUGUI gameMoneyText;   //addFromScene
-    public TextMeshProUGUI gameLifesText;   //addFromScene
-    public GameObject healthBar;            //addFromScene
+    public Text gameMoneyText;   //addFromScene
+    public Text gameLifesText;   //addFromScene
     public Canvas GameUI;                   //addFromScene
 
     public static Camera mainCamera;
@@ -30,7 +28,7 @@ public class LevelManager : MonoBehaviour
     public static bool IsGameOver { get; set; }
     public static bool IsPaused { get; set; }
 
-    private double _money = 600;
+    private double _money = 250;
     public double Money
     {
         get
@@ -67,7 +65,6 @@ public class LevelManager : MonoBehaviour
         Lifes = _lifes;
 
         mainCamera =  Camera.main;
-        healthBar =  GameObject.Find("Healthbar");
         GameUI = GameObject.Find("GameUI").GetComponent<Canvas>();
         
         _postProcess =  Camera.main.GetComponent<PostProcessingBehaviour>();
@@ -95,42 +92,49 @@ public class LevelManager : MonoBehaviour
     private ColorGradingModel _postColorGrading;
     private ColorGradingModel.Settings _postColorGradingSettings;
     private float _fadeSaturation = 1.0f;
-    private float _timescale = 1;
+    private float _scale = 1;
     private RectTransform _rect;
     void Update()
     {
         UpdateTimer();
         if(_defeatEffect){
-            _rect.localScale = new Vector3(1-_timescale,1-_timescale,1-_timescale);
-            if(Time.timeScale > 0f){
-                _timescale =Time.timeScale = Mathf.Clamp(Time.timeScale-0.01f, 0,1);
-            }else if(Time.timeScale == 0){
-                _defeatEffect = false;
+            Time.timeScale = 1;
+            _rect.localScale = new Vector3(1-_scale,1-_scale,1-_scale);
+            _scale -= 0.1f;
+            if(Time.timeScale != 1){
+                Time.timeScale = 1;
             }
             if(_fadeSaturation > 0){
-                _fadeSaturation -= 0.01f;
+                _fadeSaturation -= 0.1f;
                 _postColorGradingSettings.basic.saturation = _fadeSaturation;
                 _postColorGrading.settings = _postColorGradingSettings;
             }else if(_fadeSaturation != 0){
                 _fadeSaturation = 0;
                 _postColorGradingSettings.basic.saturation = _fadeSaturation;
                 _postColorGrading.settings = _postColorGradingSettings;
+
+                _defeatEffect = false;
+                Time.timeScale = 0;
             }
         }
     }
     public void Win()
     {
-        IsPaused = true;
+        IsGameOver = true;
+        _defeatEffect = true;
+        SwitchToScreen(TDScreen.WIN);
     }
     public Dictionary<TDScreen, CanvasGroup> Screens = new Dictionary<TDScreen, CanvasGroup>();
     public CanvasGroup GameOverScreen;
     public CanvasGroup PauseScreen;
     public CanvasGroup HUD;
+    public CanvasGroup WinScreen;
 
     void initScreens(){
         Screens.Add(TDScreen.GAME_OVER, GameOverScreen);
         Screens.Add(TDScreen.HUD, HUD);
         Screens.Add(TDScreen.PAUSE, PauseScreen);
+        Screens.Add(TDScreen.WIN, WinScreen);
     }
     public void SwitchToScreen(TDScreen screen){
         foreach(CanvasGroup canvas in Screens.Values){
@@ -151,6 +155,23 @@ public class LevelManager : MonoBehaviour
             SwitchToScreen(TDScreen.PAUSE);
         }else{
             SwitchToScreen(TDScreen.HUD);
+        }
+    }
+    int fastForwardState = 0;
+    public void ToggleFastForward(){
+        switch(fastForwardState){
+            case 0:
+                Time.timeScale = 2;
+                fastForwardState++;
+                break;
+            case 1:
+                Time.timeScale = 4;
+                fastForwardState++;
+            break;
+            case 2:
+                Time.timeScale = 1;
+                fastForwardState  = 0;
+            break;
         }
     }
     public void StartLevel(int mapSizeX, int mapSizeZ, int levelDifficulty, GameObject mapGroundObject)
@@ -181,5 +202,6 @@ public class LevelManager : MonoBehaviour
 public enum TDScreen{
     HUD,
     GAME_OVER,
+    WIN,
     PAUSE
 }

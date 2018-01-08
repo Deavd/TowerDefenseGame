@@ -1,0 +1,45 @@
+newmtl Material - Aufgeblasene Vorderseite Simple Defense
+Ka 0.000000 0.000000 0.000000
+Kd 0.500000 0.500000 0.500000
+Ks 0.200000 0.200000 0.200000
+Ns 6.062867
+d 1.000000
+Tr 0.000000
+map_Kd -s 0.527508 0.207842 1.0 -o 0.248136 0.393194 1.0 Simple Defense0000.psd 
+
+newmtl Material - Vorderseite mit abgeflachten Kanten Simple Defense
+Ka 0.000000 0.000000 0.000000
+Kd 0.500000 0.500000 0.500000
+Ks 0.200000 0.200000 0.200000
+Ns 6.062867
+d 1.000000
+Tr 0.000000
+map_Kd -s 0.527508 0.207842 1.0 -o 0.248136 0.393194 1.0 Simple Defense0000.psd 
+
+newmtl Material - Extrusion Simple Defense
+Ka 0.000000 0.000000 0.000000
+Kd 0.500000 0.500000 0.500000
+Ks 0.200000 0.200000 0.200000
+Ns 6.062867
+d 1.000000
+Tr 0.000000
+map_Kd Material - Extrusion Simple Defense - Standardtextur0000.psd 
+
+newmtl Material - Rückseite mit abgeflachten Kanten Simple Defense
+Ka 0.000000 0.000000 0.000000
+Kd 0.500000 0.500000 0.500000
+Ks 0.200000 0.200000 0.200000
+Ns 6.062867
+d 1.000000
+Tr 0.000000
+map_Kd -s 0.527508 0.207842 1.0 -o 0.248136 0.393194 1.0 Simple Defense0000.psd 
+
+newmtl Material - Aufgeblasene Rückseite Simple Defense
+Ka 0.000000 0.000000 0.000000
+Kd 0.500000 0.500000 0.500000
+Ks 0.200000 0.200000 0.200000
+Ns 6.062867
+d 1.000000
+Tr 0.000000
+map_Kd -s 0.527508 0.207842 1.0 -o 0.248136 0.393194 1.0 Simple Defense0000.psd 
+

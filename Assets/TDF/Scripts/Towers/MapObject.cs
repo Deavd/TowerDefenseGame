@@ -63,7 +63,7 @@ public class MapObject : MonoBehaviour, IPointerClickHandler
                         TowerMenuUI.Instance.LoadTowerGui(this);
                     }
                 }else{
-                    ShowMessage.Instance.WriteMessageAt("Cannot place a tower here!", eventData.position, MessageType.WARNING, 14, 0);
+                    ShowMessage.Instance.WriteMessageAt("Cannot place a tower here!", eventData.position,MessageType.WARNING, 14, 0);
                     //Cannot play in the path of the enemies
                 }
             }else{

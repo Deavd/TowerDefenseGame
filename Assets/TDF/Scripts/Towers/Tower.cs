@@ -12,9 +12,8 @@ public class Tower : MonoBehaviour, StatHolder
 
     public  int id;
     public string displayName;
-
+    public GameObject Button;
     public TowerTypes TowerType;
-    public TargetTypes TargetType = TargetTypes.CLOSE;
     private TowerStat _towerStat;
     public TowerStat Stats {
         set{
@@ -25,15 +24,19 @@ public class Tower : MonoBehaviour, StatHolder
         }
     }
 
+    UnityEngine.AI.NavMeshObstacle navMeshObstacle;
+    protected virtual void Start(){
 
+    }
     protected virtual void Awake(){
         Stats = GetComponent<TowerStat>();
-        GetComponent<UnityEngine.AI.NavMeshObstacle>().enabled = false;
+        (navMeshObstacle = GetComponent<UnityEngine.AI.NavMeshObstacle>()).enabled = false;
         this.gameObject.tag = "Tower";
     }
-
+    public int UpgradeLevel = 0;
     public virtual bool Upgrade()
     {
+        UpgradeLevel++;
         return Stats.LevelUpAll();
     }
     public virtual void Sell(){
@@ -43,10 +46,11 @@ public class Tower : MonoBehaviour, StatHolder
 
 
     public virtual void Build(){
+        navMeshObstacle.enabled = true;
         if(TowerType == TowerTypes.NORMAL){
             GameObject[] towerObjects = GameObject.FindGameObjectsWithTag("Tower");
             foreach(GameObject towerObject in towerObjects){
-                Tower t = towerObject.GetComponent<Tower>();
+                Tower t = towerObject.GetComponent<Tower>();                
                 if(t.TowerType == TowerTypes.AURA){
                     float distance = (this.transform.position - towerObject.transform.position).magnitude;  
                     if(distance <= t.Stats.Range.Value){
@@ -60,7 +64,9 @@ public class Tower : MonoBehaviour, StatHolder
                 
             }
         }
-        //buildtime?
+        Activate();
+    }
+    public virtual void Activate(){
         active = true;
     }
     public void OnStatChanged(Stat stat)

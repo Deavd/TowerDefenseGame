@@ -34,12 +34,12 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4662306386296856}
-  - component: {fileID: 114709049967202682}
   - component: {fileID: 208646148038869306}
+  - component: {fileID: 114709049967202682}
   - component: {fileID: 114320032339528314}
   m_Layer: 0
   m_Name: Tower_Rocket
-  m_TagString: Untagged
+  m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -313,60 +313,82 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AttackSpeed:
     Display: 1
-    Name: Attack speed
     Type: 3
     Description: 
-    BaseValue: 0
-    LevelScale: 0
-    LevelScaleValues: []
+    BaseValue: 1
+    _value: 0
+    LevelScale: 2
+    scaleValues:
+    - 0.9
+    - 0.7
+    - 0.7
+    Modifiers: []
   Damage:
     Display: 1
-    Name: Damage
     Type: 2
     Description: 
-    BaseValue: 0
-    LevelScale: 0
-    LevelScaleValues: []
+    BaseValue: 16
+    _value: 0
+    LevelScale: 2
+    scaleValues:
+    - 1.3
+    - 1.3
+    - 1.3
+    Modifiers: []
   Range:
     Display: 1
-    Name: Range
     Type: 4
     Description: 
-    BaseValue: 0
-    LevelScale: 0
-    LevelScaleValues: []
+    BaseValue: 7
+    _value: 0
+    LevelScale: 1
+    scaleValues:
+    - 0.5
+    - 0.5
+    - 0.25
+    Modifiers: []
   BuyPrice:
     Display: 0
-    Name: buyprice
     Type: 6
     Description: 
-    BaseValue: 0
-    LevelScale: 0
-    LevelScaleValues: []
+    BaseValue: 160
+    _value: 0
+    LevelScale: 2
+    scaleValues:
+    - 1.5
+    - 1.5
+    - 2
+    Modifiers: []
   SellPrice:
     Display: 0
-    Name: sellprice
     Type: 7
     Description: 
-    BaseValue: 0
-    LevelScale: 0
-    LevelScaleValues: []
+    BaseValue: 175
+    _value: 0
+    LevelScale: 2
+    scaleValues:
+    - 1.5
+    - 1.5
+    - 2
+    Modifiers: []
   BuildTime:
     Display: 1
-    Name: Build Time
     Type: 5
     Description: 
     BaseValue: 0
+    _value: 0
     LevelScale: 0
-    LevelScaleValues: []
+    scaleValues: []
+    Modifiers: []
   Effect:
     Display: 0
-    Name: 
-    Type: 0
+    Type: 8
     Description: 
     BaseValue: 0
+    _value: 0
     LevelScale: 0
-    LevelScaleValues: []
+    scaleValues: []
+    Modifiers: []
 --- !u!114 &114709049967202682
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -378,12 +400,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0afa50f3be4960c4da7bb41bf5ac9aa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 1
+  id: 3
   displayName: Rocket Launcher
-  missile: {fileID: 1432614511051400, guid: c349208ffa162bf47bb1dd225cc43ecd, type: 2}
-  TargetType: 2
-  Target: {fileID: 0}
+  Button: {fileID: 1485505348923044, guid: 87f65c1ad97df8041bf328cac5803c8f, type: 2}
   TowerType: 0
+  UpgradeLevel: 0
+  active: 0
+  HasEffect: 0
+  TargetType: 2
+  Effect:
+    EffectName: 
+    EffectNameVerb: 
+    Time: 0
+    Period: 0
+    hasTime: 0
+    hasPeriod: 0
+    Value: 0
+    statType: 0
+    modifierAddType: 0
+  Origin: 0
+  missile: {fileID: 1432614511051400, guid: c349208ffa162bf47bb1dd225cc43ecd, type: 2}
+  Target: {fileID: 0}
+  IsShooting: 0
 --- !u!208 &208646148038869306
 NavMeshObstacle:
   m_ObjectHideFlags: 1

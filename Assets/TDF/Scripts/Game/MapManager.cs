@@ -64,19 +64,19 @@ public class MapManager : MonoBehaviour {
 		if(bottom&&top){
 			return true;
 		}
-			//reched top?
+			//reached top of the map
 			if(z == this.z-1){
 				top = true;
 			}else{
 				//get the row on z+1
 				int i = z+1;
-				//go through the 3 fields that could block the way
+				//go through the 3 fields on top that could block the way
 				for(int n = -1; n <= 1; n++){
 					//if its out of the map continue
 					if(x+n < 0 || x+n >= this.x){
 						continue;
 					}
-					//otherwise check if its buildable and goneThrough
+					//otherwise check if its buildable and not goneThrough already
 					if(!Map[x+n,i].isBuildable && !goneThrough[x+n,i]){
 						//if its buildable mark with goneTHrough
 						goneThrough[x+n,i] = true;
@@ -87,11 +87,12 @@ public class MapManager : MonoBehaviour {
 					}
 				}
 			}
+			//reached bottom of the map
 			if(z == 0){
 				bottom = true;
 			}else{
 				int i = z-1;
-				//same as above, just going down
+				//same as above, just checking the 3 blocks under
 				for(int n = -1; n <= 1; n++){
 					if(x+n < 0 || x+n >= this.x){
 						continue;

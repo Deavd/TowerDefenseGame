@@ -16,7 +16,6 @@ public class AuraTower : Tower {
         }
     }
     protected override void Awake(){
-        Debug.Log("AWAKING!");
         base.Awake();
     }
 	public override void Build(){
@@ -29,6 +28,7 @@ public class AuraTower : Tower {
     }
     public override bool Upgrade(){
         var b = base.Upgrade();
+        AuraStats.LevelUpAll();
         UpdateModifiers();
         return b;
     }
@@ -58,22 +58,16 @@ public class AuraTower : Tower {
         }
         AddModifiersToTowers();
     }
+    GameObject[] towerObjects;
     public void AddModifiersToTowers(){
-        GameObject[] towerObjects = GameObject.FindGameObjectsWithTag("Tower");
-        Debug.Log("- Tower building! Objects found on map: "+towerObjects.Length);
+        towerObjects = GameObject.FindGameObjectsWithTag("Tower");
         foreach(GameObject towerObject in towerObjects){
             float distance = (this.transform.position - towerObject.transform.position).magnitude;  
             if(distance <= Stats.Range.Value){
-                Debug.Log("- Tower in Range found!");
                 Tower tower = towerObject.GetComponent<Tower>();
-                if(tower.TowerType == TowerTypes.NORMAL){
-                    Debug.Log("- IS Normal Tower!");
-                    foreach(StatModifier statModifier in TowerModifiers){
-                        Debug.Log("- Checking if stat is here! "+statModifier.statType);
-                        if(tower.Stats.hasStat(statModifier.statType)){
-                            Debug.Log("- Adding mod!");
-                            tower.Stats.addModifierToStat(statModifier);
-                        }
+                foreach(StatModifier statModifier in TowerModifiers){
+                    if(tower.Stats.hasStat(statModifier.statType)){
+                        tower.Stats.addModifierToStat(statModifier);
                     }
                 }
             }

@@ -28,10 +28,10 @@ public class StatManager : MonoBehaviour {
             return _statDict;
         }
     }
-	public bool CanLevelUp(){
+	public bool CanLevelUp(int level = -1){
 		bool state = false;
 		foreach(Stat stat in StatDict.Values){
-			if(stat.CanLevelUP()){
+			if(stat.CanLevelUP(level)){
 				state = true;
 			}
 		}
@@ -65,8 +65,8 @@ public class StatManager : MonoBehaviour {
 	}
 	public void addStat(StatType type, Stat stat){
 		stat.Type = type;
-		stat.Init();
 		StatDict.Add(type, stat);
+		stat.Init();
 	}
 	public bool addModifierToStat(StatModifier mod){
 		Stat stat;
@@ -76,52 +76,66 @@ public class StatManager : MonoBehaviour {
 		}
 		return false;
 	}
+	class ModValues{
+		public ModValues(float time, StatModifier mod){
+			isActive = false;
+			activatedTime = time;
+			stackedTime = mod.Time;
+			modifier = mod;
+		}
+		public float activatedTime;
+		public bool isActive;
+		public StatModifier modifier;
+		public float stackedTime;
+	}
+	List<ModValues> _activeModifierValues = new List<ModValues>();
 	public bool addTimeModifierToStat(StatModifier mod){
 		Stat stat;
 		if((stat = getStat(mod.statType))!= null){
-			if(!mod.isActive){			
+			ModValues values = _activeModifierValues.Find(x => x.modifier == mod);
+			if(values == null){
+				Debug.Log("Adding");
+				values = new ModValues(Time.time, mod);
+				_activeModifierValues.Add(values);
+			}
+			if(!values.isActive){	
 				stat.AddModifier(mod);	
-				mod.activatedTime = Time.time;
-				mod.isActive = true;
+				values.isActive = true;
 				if(mod.hasPeriod){
-					//Debug.Log("MODIFIER WITH PERIOD");
-					StartCoroutine(ReplayEffect(stat, mod));
+					StartCoroutine(ReplayEffect(stat, values));
 				}else if(mod.hasTime){
-					//StatDict[type] = stat;
-					StartCoroutine(RemoveEffect(stat, mod));
+					StartCoroutine(RemoveEffect(stat, values));
 				}
 				return true;
+			}else{
+				values.stackedTime = mod.Time;
 			}
-			mod.stackedTime = mod.Time;
 			return true;
 		}
 		return false;
 	}
-	IEnumerator ReplayEffect(Stat stat, StatModifier mod){
-		if(mod.isActive){
-			yield return new WaitForSeconds(mod.Period);
+	IEnumerator ReplayEffect(Stat stat, ModValues values){
+		if(values.isActive){
+			yield return new WaitForSeconds(values.modifier.Period);
 			//Debug.Log("REPLAYING: "+mod.hasPeriod);
-			stat.AddModifier(mod);
-			StartCoroutine(ReplayEffect(stat, mod));
+			stat.AddModifier(values.modifier);
+			StartCoroutine(ReplayEffect(stat, values));
 		}else{
 			Debug.Log("NO LONGER REPLAYING EFFECT!");
 		}
 	}
-	IEnumerator RemoveEffect(Stat stat, StatModifier mod){
-		yield return new WaitForSeconds(mod.Time);
-		while(mod.stackedTime > 0){		
-			float deltaTime = Time.time - mod.activatedTime;
-			float time = mod.stackedTime-deltaTime;
-			mod.stackedTime = 0;
+	IEnumerator RemoveEffect(Stat stat, ModValues values){
+		yield return new WaitForSeconds(values.modifier.Time);
+		Debug.Log("REMOVING EFFECT");	
+		while(values.stackedTime > 0){		
+			float deltaTime = Time.time - values.activatedTime;
+			float time = values.stackedTime-deltaTime;
+			values.stackedTime = 0;
 			yield return new WaitForSeconds(time);
 		}
-		stat.RemoveModifier(mod);
-		mod.isActive = false;
-	}
-	IEnumerator modtester(StatModifier mod){
-		Debug.Log(mod.Period);
-		yield return new WaitForSeconds(0.5f);
-		StartCoroutine(modtester(mod));
+		_activeModifierValues.Remove(values);
+		stat.RemoveModifier(values.modifier);
+		values.isActive = false;
 	}
 	public bool removeModifierFromStat(StatModifier mod){
 		Stat stat;

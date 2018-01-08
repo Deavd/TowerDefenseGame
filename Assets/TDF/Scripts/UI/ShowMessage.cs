@@ -16,10 +16,10 @@ public class ShowMessage : MonoBehaviour {
             return (_instance == null ? _instance = FindObjectOfType<ShowMessage>() : _instance) == null ? _instance = new GameObject().AddComponent<ShowMessage>(): _instance;
         }
     }
-	public void WriteMessageAt(string s, Vector2 pos, MessageType type = MessageType.INFO, int fontSize = 12, float time = 0.5f){
+	public void WriteMessageAt(string s, Vector2 pos, MessageType type = MessageType.INFO, int fontSize = 12, float time = 0.5f, Color? textColor = null, Color? imageColor = null){
 		Image image = Instantiate(TextHolder, pos, Quaternion.identity).GetComponent<Image>();
 		Text text = image.transform.GetChild(0).GetComponent<Text>();
-		
+		text.color = textColor.GetValueOrDefault(Color.white);
 		image.transform.SetParent(this.transform);
 		text.text = s;
 		text.fontSize = fontSize;
@@ -32,6 +32,9 @@ public class ShowMessage : MonoBehaviour {
 				break;
 			case MessageType.WARNING:
 				image.color = Warning;
+				break;
+			case MessageType.DEFAULT:
+				image.color = imageColor.GetValueOrDefault(Info);
 				break;
 		}
 		StartCoroutine(fadeOut(image, text, time));
@@ -60,5 +63,6 @@ public class ShowMessage : MonoBehaviour {
 	public enum MessageType{
 		ERROR,
 		WARNING,
-		INFO
+		INFO,
+		DEFAULT
 	}

@@ -38,25 +38,41 @@ public class TowerMenuUI : MonoBehaviour {
 		selectedMapObj.isBuildable = true;
 		UnloadTowerGui();		
 	}
+	public Material[] LevelMaterial;
 	public void clickBuy(){
 		if(selectedMapObj== null){return;}
 		Tower t = selectedMapObj.Tower;
 		float price = t.Stats.BuyPrice.GetLevelScaleAddValue();
-		if(LevelManager.Instance.Money < price){
+		if(LevelManager.Instance.Money > price){
 			ShowMessage.Instance.WriteMessageAt("Not enough money!", Input.mousePosition, MessageType.ERROR, 12, 0.3f);
 		}else{
 			if(t.Upgrade()){			
+				Debug.Log("2");
+				Renderer[] renderComponents = t.GetComponentsInChildren<Renderer>();
+				for(int i = 0; i < renderComponents.Length; i++)
+				{
+					Material[] materials = renderComponents[i].materials;
+					for(int j = 0; j < materials.Length; j++){
+						Debug.Log(materials[j].name);
+						if(materials[j].name.StartsWith("MatHead")){
+							materials[j] = LevelMaterial[t.UpgradeLevel-1];
+						}
+					}
+					renderComponents[i].materials = materials;
+					
+				}
 				LevelManager.Instance.Money -= t.Stats.BuyPrice.Value;
 			}
 		}
 		LoadTowerGui(selectedMapObj);
 	}
-	public void LoadTowerGui(MapObject mapObj){
+	public GameObject StatText;
+	public GameObject StatBar;
+	private Transform _statContainer;
+	public void LoadTowerGui(Tower t){		 
 		TowerGUI.SetActive(true);
-		Tower t = mapObj.Tower;
-		ShowRangePreview(t.Stats.Range.Value, mapObj.transform.position);
-		selectedMapObj = mapObj;
 		foreach(Text text in _childTexts){
+			if(text == null){continue;}
 			switch(text.name){
 				case "SELL_txt":
 					text.text = t.Stats.SellPrice.Value + "$ SELL";
@@ -67,23 +83,84 @@ public class TowerMenuUI : MonoBehaviour {
 					text.GetComponentInParent<Button>().interactable = t.Stats.CanLevelUp();
 					break;
 				case "INFO_txt":
-					
-					text.text = ColorString(t.displayName,"#00ff00ff")+ System.Environment.NewLine;
-					foreach(Stat stat in  t.Stats.StatDict.Values){
+					if(_statContainer == null){
+						_statContainer = text.transform.GetChild(0);
+					}
+					foreach (Transform child in _statContainer.transform) {
+						GameObject.Destroy(child.gameObject);
+					}
+					text.text = "<b>"+ColorString(t.displayName,"#64fdd0ff")+"</b>\r\n\r\n\r\n";
+					/*foreach(Stat stat in  t.Stats.StatDict.Values){
 						if(stat.Display){
 							float scaleValue = stat.GetLevelScaleAddValue();
-							text.text += ColorString(stat.Name+": ", "#66ff00ff")
+							text.text += "<b>"+ColorString(stat.Name+":   ", "#64fdd0ff")+"</b>"
 								+ColorString(stat.Value.ToString(), "#ff0000ff") 
 								+ (scaleValue != -1f ? ColorString(" (" +scaleValue+")", "#ff5500ff") : "")
-								+ System.Environment.NewLine;
+								+ "\r\n\r\n";
 						}
-					}					
+					}	*/
+					//Vector3 position = new Vector3(0,0,0);
+					Vector3 position = _statContainer.position;
+					foreach(Stat stat in  t.Stats.StatDict.Values){
+						if(stat.Display){
+							Transform statText = Instantiate(StatText).transform;
+							statText.SetParent(_statContainer);
+							statText.position = position;
+							position.y -= 20;
+							Transform statBar = Instantiate(StatBar).transform;
+							statBar.SetParent(_statContainer);
+							statBar.position = position;
+							position.y -= 40;
+
+							statText.GetComponent<Text>().text = "<b>"+ColorString(stat.Name+":   ", "#ffffff")+"</b>";
+
+							Image bar_upgrade = statBar.GetChild(0).GetComponent<Image>();
+							Image bar_current = statBar.GetChild(0).GetChild(0).GetComponent<Image>();
+							
+							float value = stat.Value;
+							bar_current.fillAmount = GetPercentage(stat.Type, value);
+
+							float scaleValue = stat.GetLevelScaleAddValue();
+							if(scaleValue != -1f && t.active){
+								bar_upgrade.fillAmount = GetPercentage(stat.Type, scaleValue);
+							}else{
+								bar_upgrade.fillAmount = 0;
+							}
+
+						}
+					}		
+					
+					if(t is AttackTower){
+						AttackTower attackTower = (AttackTower)t;
+						if(attackTower.HasEffect){
+							Transform statText = Instantiate(StatText).transform;
+							statText.SetParent(_statContainer);
+							statText.position = position;
+
+							Stat effetStat = t.Stats.getStat(StatType.Effect);
+							statText.GetComponent<Text>().text = String.Format(
+								"This tower has a {0} effect. It's active for {1} seconds and {2} the enemy"+ 
+								(attackTower.Effect.hasPeriod ? " every "+attackTower.Effect.Period+" seconds" : " once")+
+								" by {3}",
+									attackTower.Effect.EffectName,
+									attackTower.Effect.Time,
+									attackTower.Effect.EffectNameVerb,
+									String.Format(
+										getAddTypeName(attackTower.Effect.modifierAddType), 
+										((attackTower.Effect.modifierAddType == StatModifierAddType.PERCENTAGE_BASE  || 
+											attackTower.Effect.modifierAddType == StatModifierAddType.PERCENTAGE_MODIFIED) ?	
+											(1f-effetStat.Value)*100 : effetStat.Value)
+									)
+							);
+						}
+					}
+					
 					break;
 				case "TARGETTYPE_txt":
-					if(t.TowerType == TowerTypes.NORMAL){
+					if(t is AttackTower){
 						_drop.gameObject.SetActive(true);
-						text.text = t.TargetType.ToString();
-						_drop.value = (int)t.TargetType;
+						text.text = ((AttackTower)t).TargetType.ToString();
+						_drop.value = (int)((AttackTower)t).TargetType;
 					}else{
 						_drop.gameObject.SetActive(false);
 					}
@@ -91,11 +168,46 @@ public class TowerMenuUI : MonoBehaviour {
 			}
 		}
 	}
+	public String getAddTypeName(StatModifierAddType type){
+		switch(type){
+			case StatModifierAddType.PERCENTAGE_BASE:
+				return "{0}%  of its base value";
+			case StatModifierAddType.PERCENTAGE_MODIFIED:
+				return "{0}%";
+			case StatModifierAddType.VALUE_BASE:
+				return "{0} of its base value";
+			case StatModifierAddType.VALUE_MODIFIED:
+				return "{0}";
+
+		}
+		return "";
+	}
+	public float GetPercentage(StatType type, float value){
+		switch(type){
+			case StatType.Range:
+				return value/10f;
+			case StatType.AttackSpeed:
+				return 0.1f/value;
+			case StatType.Damage:
+				return value/100f;
+			case StatType.BuildTime:
+				return value/0.5f;
+			
+		}
+		return 1;
+	}
+	public void LoadTowerGui(MapObject mapObj){
+		Tower t = mapObj.Tower;
+		ShowRangePreview(t.Stats.Range.Value, mapObj.transform.position);
+		selectedMapObj = mapObj;
+		LoadTowerGui(t);
+	}
 	public void ChangeTargetType()
 	{
-		if(selectedMapObj== null){return;}
-		Tower t = selectedMapObj.Tower;
-		t.TargetType = (TargetTypes)Enum.Parse(typeof(TargetTypes), _drop.options[_drop.value].text);
+		if(selectedMapObj != null && selectedMapObj.Tower is AttackTower){
+			AttackTower t = (AttackTower)selectedMapObj.Tower;
+			t.TargetType = (TargetTypes)Enum.Parse(typeof(TargetTypes), _drop.options[_drop.value].text);
+		}
 		
 	}
     public void UnloadTowerGui()

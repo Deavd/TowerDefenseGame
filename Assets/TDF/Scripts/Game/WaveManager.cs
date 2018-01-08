@@ -24,18 +24,18 @@ public class WaveManager : MonoBehaviour
     public GameObject[] enemies;
     public GameObject[] spawnpoints;
     public string[] Waves;
-    private int _wave = 0;
+    public static int Wave = 0;
     public bool isRunning = true;  
     public bool isBuildingPhase = true;  
     public void startSpawningWaves()
     {
-        Debug.Log("- Starting wave: "+_wave);
+        Debug.Log("- Starting wave: "+Wave);
         isRunning = true;
         isBuildingPhase = false;
         //wave: "id:amount:period :::"
         if(hasNextWave()){
-            spawnWave(Waves[_wave]);
-            _wave++;
+            spawnWave(Waves[Wave], Wave);
+            Wave++;
         }else{
             if(EnemiesAlive == 0){
                 Win();
@@ -43,11 +43,11 @@ public class WaveManager : MonoBehaviour
         }
     }
     public bool hasNextWave(){
-        return Waves.Length > _wave;
+        return Waves.Length > Wave;
     }
-    private void spawnWave(string wave)
+    private void spawnWave(string wave, int waveID)
     {
-        StartCoroutine("SpawnWave", wave);
+        StartCoroutine(SpawnWave(wave, waveID));
     }
 
   
@@ -79,12 +79,12 @@ public class WaveManager : MonoBehaviour
         }
     }
     public static int EnemiesAlive = 0;
-    IEnumerator SpawnWave(String s)
+    IEnumerator SpawnWave(String s, int waveID)
     {
         _wavePrefix = "Wave ends in: ";
         String[] partWaves = s.Split();
-        WaveUI.text = _wave + "/" + "-";
-        float timeNeeded = 0f;;
+        WaveUI.text = Wave + "/" + "-";
+        float timeNeeded = 0f;
 
         int id;
         float next = 0f;
@@ -99,20 +99,15 @@ public class WaveManager : MonoBehaviour
             int.TryParse(parts[1], out amount);
             float.TryParse(parts[2], out period);
             float.TryParse(parts[3], out next);
-            timeNeeded += amount * period + (partWaves.Length - 1) * _delayToNextPartWave;
+            timeNeeded += amount * period + next;
         }
         WaveStartTime = timeNeeded;
-        //WaveUITime.text = (WaveStartTime /60).ToString();
-        //String format: id:amount:period:next id:amount:period
-        //yield return new WaitForSeconds(timeToStart);
-        Debug.Log("Spawning Wave");
         for(int j = 0; j < partWaves.Length; j++)
         {
             String partWave = partWaves[j];
             if(partWave == ""){
                 continue;
             }
-            Debug.Log("Spawning PartWave");
             String[] parts = partWave.Split(":".ToCharArray()[0]);
             int.TryParse(parts[0], out id);
             int.TryParse(parts[1], out amount);
@@ -121,43 +116,46 @@ public class WaveManager : MonoBehaviour
             for(int i = 0; i < amount; i++)
             {
                 EnemiesAlive++;
+                SoundManager.Instance.PlaySound("spawnSound");
                 GameObject spawnedEnemy = Instantiate(enemies[id], spawnpoints[0].transform.position, Quaternion.identity);
                 spawnedEnemy.GetComponent<NavMeshAgent>().SetDestination(homeBase.transform.position);
+                Enemy enemy = spawnedEnemy.GetComponent<Enemy>();
+                for(int level = 0; level < waveID; level++){
+                    Debug.Log("LEVELUP");
+                    enemy.Stats.LevelUpAll();
+                }
                 if(i == amount-1){
                     yield return null;
                 } 
-                //Debug.Log("Spawning Enemy with "+period + "delay");
                 yield return new WaitForSeconds(period);
             }
             if(j == partWaves.Length-1){
-                Debug.Log("Last Wave.. start with Buildingtime");
                 yield return null;
             }else{
-                Debug.Log("Another Wave.. spawn that!");
                 yield return new WaitForSeconds(next);
             }
         }
         if(isRunning){
             if(hasNextWave()){
-                _wavePrefix = "Next Wave incoming: ";
-                Debug.Log("Enter Buildingtime!");
-                isBuildingPhase = true;
-                WaveStartTime = next;
-                yield return new WaitForSeconds(next);
-                startSpawningWaves();
+                    _wavePrefix = "Next Wave incoming: ";
+                    isBuildingPhase = true;
+                    WaveStartTime = next;
+                    yield return new WaitForSeconds(next);
+
+                if(Wave == waveID+1){
+                    startSpawningWaves();
+                }
             }else{
                 if(EnemiesAlive == 0){
                     Win();
                 }
-            }        
+            }
         }
     }
     public void Win(){
         isBuildingPhase = true;
         isRunning = false;
         this.WaveUITime.text = "All waves cleared!";
-        Debug.Log("- All waves cleared!");
-
-        LevelManager.Instance.SwitchToScreen(TDScreen.HUD);
+        LevelManager.Instance.Win();
     }
 }

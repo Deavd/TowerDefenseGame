@@ -2,15 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-
+using System.Text;
+using UnityEngine.Serialization;
 [System.Serializable]
 public class Stat{
 	public bool Display = true;
-	public string Name;
+	private string name;
+	StringBuilder displayName;
+	public string Name{
+		get{
+			if(!String.IsNullOrEmpty(name)){
+				return name;
+			}
+			String typeName = Type.ToString();
+			displayName = new StringBuilder(typeName.Length+3);
+			displayName.Append(typeName[0]);
+			for (int i = 1; i < typeName.Length; i++){
+				if (char.IsUpper(typeName[i]) && typeName[i - 1] != ' '){
+					displayName.Append(' ');
+				}
+				displayName.Append(typeName[i]);
+			}
+			return name = displayName.ToString();
+		}
+		set{
+			this.name = value;
+		}
+	}
 	public StatType Type;
 	public string Description;
 	public float BaseValue;
-	private float _value;
+	public float _value;
 	public float Value{
 		set{
 			_value = value;
@@ -18,6 +40,7 @@ public class Stat{
 		get{
 			if(!_init){
 				Init();
+				
 			}
 			return (_value + BaseValue * _baseFactor) * _factor;			
 		}
@@ -25,20 +48,20 @@ public class Stat{
 	private float _factor = 1f;
 	private float _baseFactor = 1f;
 	public  LevelScale LevelScale;
-	private int _levelScaleLevel = 0;
-	public float[] LevelScaleValues;
+	private int _scaleLevel = 0;
+	public float[] scaleValues;
 	public List<StatModifier> Modifiers  = new List<StatModifier>();
 	// Use this for initialization
 	public delegate void ValueChangedEventHandler(object source, EventArgs args);
 	public event ValueChangedEventHandler ValueChanged;
 	bool _init = false;
 	public void Init(){
+		_init = true;
 		_factor = 1;
 		_baseFactor = 1;
-		_levelScaleLevel = 0;
+		_scaleLevel = 0;
 		_value = 0;
 		OnValueChanged();
-		_init = true;
 	}
 	protected virtual void OnValueChanged(){
 		if(ValueChanged != null){
@@ -61,12 +84,15 @@ public class Stat{
 		this.BaseValue = value;
 		return this;
 	}
-	public bool CanLevelUP(){
-		return LevelScaleValues.Length > _levelScaleLevel;
+	public bool CanLevelUP(int level = -1){
+		if(scaleValues == null){
+			return false;
+		}
+		return scaleValues.Length > _scaleLevel;
 	}
-	public bool LevelUP(){
-		if(CanLevelUP()){
-			this._levelScaleLevel++;
+	public bool LevelUP(int level = -1){
+		if(CanLevelUP(level)){
+			this._scaleLevel++;
 			UpdateLevelScaling();
 			return true;
 		}
@@ -78,11 +104,13 @@ public class Stat{
 		}
 		switch(LevelScale){
 			case LevelScale.ADD:
-				return this.BaseValue + LevelScaleValues[_levelScaleLevel];
+				return this.BaseValue + scaleValues[_scaleLevel];
 			case LevelScale.MULTIPLY:
-				return this.BaseValue * LevelScaleValues[_levelScaleLevel];
+				return this.BaseValue * scaleValues[_scaleLevel];
 			case LevelScale.SUBTRACT:
-				return this.BaseValue - LevelScaleValues[_levelScaleLevel];
+				return this.BaseValue - scaleValues[_scaleLevel];
+			case LevelScale.SET:
+				return this.BaseValue = scaleValues[_scaleLevel];
 			default:
 				return -1f;
 		}
@@ -90,14 +118,17 @@ public class Stat{
 	public void UpdateLevelScaling(){
 		switch(LevelScale){
 			case LevelScale.ADD:
-				this.BaseValue += LevelScaleValues[_levelScaleLevel-1];
+				this.BaseValue += scaleValues[_scaleLevel-1];
 				break;
 			case LevelScale.MULTIPLY:
-				this.BaseValue *= LevelScaleValues[_levelScaleLevel-1];
+				this.BaseValue *= scaleValues[_scaleLevel-1];
 				break;
 			case LevelScale.SUBTRACT:
-				this.BaseValue -= LevelScaleValues[_levelScaleLevel-1];
-				break;										
+				this.BaseValue -= scaleValues[_scaleLevel-1];
+				break;		
+			case LevelScale.SET:
+				this.BaseValue = scaleValues[_scaleLevel-1];
+				break;									
 		}
 		OnValueChanged();
 	}
@@ -110,19 +141,15 @@ public class Stat{
 	}
 	public void AddModifier(StatModifier mod)
 	{	
-		Debug.Log("@@@@ NEW ADDING MODIFIER @@@@");
 		Modifiers.Add(mod);
-		//Modifiers.Add(mod);
 		switch(mod.modifierAddType){
 			case StatModifierAddType.PERCENTAGE_BASE:
-				//percentage 0-1
 				this._baseFactor = mod.Value * this._baseFactor;
 				break;
-			case StatModifierAddType.VALUE_BASE_PERMANENT:
+			case StatModifierAddType.VALUE_BASE:
 				this.BaseValue += mod.Value;
 				break;
 			case StatModifierAddType.PERCENTAGE_MODIFIED:
-				/*float current = this.Value; */
 				this._factor = mod.Value * this._factor;
 				break;
 			case StatModifierAddType.VALUE_MODIFIED:
@@ -140,7 +167,7 @@ public class Stat{
 				//percentage 0-1
 				this._baseFactor = this._baseFactor / mod.Value ;
 				break;
-			case StatModifierAddType.VALUE_BASE_PERMANENT:
+			case StatModifierAddType.VALUE_BASE:
 				this.BaseValue -= mod.Value;
 				break;
 			case StatModifierAddType.PERCENTAGE_MODIFIED:
@@ -163,7 +190,8 @@ public enum LevelScale {
 	NONE,
 	ADD,
 	MULTIPLY,
-	SUBTRACT
+	SUBTRACT,
+	SET
 } 
 public enum StatType { 
 	//PLAYER

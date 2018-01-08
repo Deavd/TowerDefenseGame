@@ -11,13 +11,17 @@ public class TowerStat : StatManager {
 	public Stat BuildTime;
 	public Stat Effect;
 	protected override void Awake () {
-		addStat(StatType.AttackSpeed, AttackSpeed);
-		addStat(StatType.Damage, Damage);
-		addStat(StatType.Range, Range);
-		addStat(StatType.BuyPrice, BuyPrice);
-		addStat(StatType.SellPrice, SellPrice);
-		addStat(StatType.BuildTime, BuildTime);
-		addStat(StatType.Effect, Effect);
+		loadStats();
 		base.Awake();
 	}
+	public void loadStats(){
+			addStat(StatType.AttackSpeed, AttackSpeed);
+			addStat(StatType.Damage, Damage);
+			addStat(StatType.Range, Range);
+			addStat(StatType.BuyPrice, BuyPrice);
+			addStat(StatType.SellPrice, SellPrice);
+			addStat(StatType.BuildTime, BuildTime);
+			addStat(StatType.Effect, Effect);
+		}
+	
 }
